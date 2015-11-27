@@ -10,7 +10,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::locale::global(std::locale(""));
 
 	Lod::File file("Resources\\h3abp_bm.lod");
-	std::cout << file.GetEntry(file.GetEntriesHeaders()[37]);
+	//Lod::File file("Resources\\H3sprite.lod");
+	std::cout << file.GetEntry(std::move(file.GetEntriesHeaders()[1]));
 	
 	system("PAUSE");
 	return 0;
