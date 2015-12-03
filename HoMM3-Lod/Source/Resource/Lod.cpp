@@ -1,5 +1,4 @@
-﻿#include "pch.h"
-#include "LodFile.h"
+﻿#include "Resource/Lod.hpp"
 #include "zlib.h"
 #include <fstream>
 
