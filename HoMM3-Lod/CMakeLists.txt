@@ -1,7 +1,7 @@
 # set various variables
 get_filename_component(HOMM3_LOD_ROOT_DIR "." ABSOLUTE)
 
-set(PROJECT_NAME HOMM3_LOD)
+set(PROJECT_NAME HoMM3_Lod)
 set(HOMM3_LOD_SOURCE "${HOMM3_LOD_ROOT_DIR}/Source")
 set(HOMM3_LOD_INCLUDE "${HOMM3_LOD_ROOT_DIR}/Include")
 

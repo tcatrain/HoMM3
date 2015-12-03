@@ -161,7 +161,7 @@ endmacro()
 # Build section
 # --------------------------
 
-project( HOMM3 C CXX )
+project( HoMM3 C CXX )
 homm3_setup()
 
 add_subdirectory( ${HOMM3_ROOT_DIR}/Dependencies/zlib-1.2.8 )
