@@ -12,6 +12,7 @@ x64
 *.vcxproj
 *.filters
 *.sln
+*.suo
 *.sdf
 *.opensdf
 
