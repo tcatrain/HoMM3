@@ -42,7 +42,7 @@ endif()
 
 # Add project's includes folder to the include directories
 target_include_directories(${PROJECT_NAME}
-	PUBLIC ${HOMM3_LOD_ROOT_DIR}/Include
+	PUBLIC ${HOMM3_LOD_ROOT_DIR}/Include ${zlib_SOURCE_DIR}
 )
 
 # Link required libraries to the project
