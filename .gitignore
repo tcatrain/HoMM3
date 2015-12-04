@@ -24,6 +24,13 @@ CMakeCache*
 cmake_install.cmake
 
 ## --------------------------
+## Unix files
+## --------------------------
+*.so
+*.a
+Makefile
+
+## --------------------------
 ## Dependencies files
 ## --------------------------
 Dependencies/zlib-1.2.8/CTestTestfile.cmake

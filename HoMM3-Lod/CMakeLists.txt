@@ -33,7 +33,7 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_INCLUDE}
 
 
 # Build as shared or static library
-if ( ${HOMM3_SHARED_LIB} )
+if ( HOMM3_SHARED_LIB )
 	add_library(${PROJECT_NAME} SHARED 
 		${${PROJECT_NAME}_Sources}
 	)

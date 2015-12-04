@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 2.8)
 
 # set various variables
 get_filename_component( HOMM3_ROOT_DIR "." ABSOLUTE )
 
-# cmake -G"Visual Studio 10" -DCMAKE_BUILD_TYPE=Debug
+# cmake -G"Visual Studio 11" -DCMAKE_BUILD_TYPE=Debug
 # --------------------------
 # Messages to add
 # message( STATUS "HOMM3_ROOT_DIR: ${HOMM3_ROOT_DIR}" )
@@ -18,7 +18,7 @@ get_filename_component( HOMM3_ROOT_DIR "." ABSOLUTE )
 # define top-level options for the whole project
 option( HOMM3_USE_THREAD "Enable thread support into HoMM3" ON )
 option( HOMM3_MEMORY_DEBUG "Enable memory debug implementation into HoMM3" ON )
-option( HOMM3_SHARED_LIB "Enable compile HoMM3 into shared lib" ON )
+option( HOMM3_SHARED_LIB "Enable compile HoMM3 into shared lib" OFF )
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
@@ -117,13 +117,13 @@ macro(homm3_setup)
 	# --------------------------
 	# detect the compiler type and define a #define for the compiler and set the debug flags
 	if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
-		list( APPEND CROISSANT_PLATFORM_DEFINES -DCOMPILER_CLANG )
-		set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -Wall -Wextra" )
+		list( APPEND HOMM3_PLATFORM_DEFINES -DCOMPILER_CLANG )
+		set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unknown-pragmas" )
 	elseif( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
-		list ( APPEND CROISSANT_PLATFORM_DEFINES -DCOMPILER_GCC )
-		set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -Wall -Wextra" )
+		list ( APPEND HOMM3_PLATFORM_DEFINES -DCOMPILER_GCC )
+		set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unknown-pragmas" )
 	elseif( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" )
-		list( APPEND CROISSANT_PLATFORM_DEFINES -DCOMPILER_MSVC )
+		list( APPEND HOMM3_PLATFORM_DEFINES -DCOMPILER_MSVC )
 		set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} /W4" )
 	endif()
 	# --------------------------
@@ -142,7 +142,7 @@ macro(homm3_setup)
 		list( APPEND HOMM3_PLATFORM_DEFINES -DHOMM3_MEMORY_DEBUG )
     endif()
 	
-	if( CROISSANT_SHARED_LIB )
+	if( HOMM3_SHARED_LIB )
 		list( APPEND HOMM3_PLATFORM_DEFINES -DHOMM3_SHARED_LIB )
 	endif()
 	# --------------------------
