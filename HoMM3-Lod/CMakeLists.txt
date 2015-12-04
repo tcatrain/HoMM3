@@ -5,11 +5,6 @@ set(PROJECT_NAME HoMM3_Lod)
 set(HOMM3_LOD_SOURCE "${HOMM3_LOD_ROOT_DIR}/Source")
 set(HOMM3_LOD_INCLUDE "${HOMM3_LOD_ROOT_DIR}/Include")
 
-# --------------------------
-# Messages to add
-# message("Building ${PROJECT_NAME} as static library")
-# message("Building ${PROJECT_NAME} as shared library")
-
 
 # --------------------------
 # Sources declaration : cpp
@@ -26,6 +21,11 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_INCLUDE}
 	Compression/ZHelper.hpp
 )
 
+# --------------------------
+# print build info
+message( STATUS "HOMM3_LOD_ROOT_DIR: ${HOMM3_LOD_ROOT_DIR}" )
+message( STATUS "HOMM3_SHARED_LIB: ${HOMM3_SHARED_LIB}" )
+# --------------------------
 
 # --------------------------
 # Build section

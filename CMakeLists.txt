@@ -6,19 +6,12 @@ get_filename_component( HOMM3_ROOT_DIR "." ABSOLUTE )
 # cmake -G"Visual Studio 11" -DCMAKE_BUILD_TYPE=Debug
 # --------------------------
 # Messages to add
-# message( STATUS "HOMM3_ROOT_DIR: ${HOMM3_ROOT_DIR}" )
-# message( STATUS "Target Platform: 32-bit" )
-# message( STATUS "Target Platform: 64-bit" )
-# message( STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
-# message( STATUS "HOMM3_PLATFORM: ${HOMM3_PLATFORM}" )
-# message( STATUS "HOMM3_DEFINE: ${HOMM3_DEFINE}" )
-# message( STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}" )
 
 #-------------------------------------------------------------------------------
 # define top-level options for the whole project
 option( HOMM3_USE_THREAD "Enable thread support into HoMM3" ON )
 option( HOMM3_MEMORY_DEBUG "Enable memory debug implementation into HoMM3" ON )
-option( HOMM3_SHARED_LIB "Enable compile HoMM3 into shared lib" OFF )
+option( HOMM3_SHARED_LIB "Enable compile HoMM3 into shared lib" ON )
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
@@ -143,6 +136,7 @@ macro(homm3_setup)
     endif()
 	
 	if( HOMM3_SHARED_LIB )
+		message("Building ${PROJECT_NAME} as shared library")
 		list( APPEND HOMM3_PLATFORM_DEFINES -DHOMM3_SHARED_LIB )
 	endif()
 	# --------------------------
@@ -152,7 +146,17 @@ macro(homm3_setup)
 	# add the plateform defines to the list of definition
 	foreach( homm3_define ${HOMM3_PLATFORM_DEFINES} )
 		add_definitions( ${homm3_define} )
+		message( STATUS "DEFINE: ${homm3_define}" )
 	endforeach()
+	# --------------------------
+	
+	
+	# --------------------------
+	# print build info
+	message( STATUS "HOMM3_ROOT_DIR: ${HOMM3_ROOT_DIR}" )
+	message( STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
+	message( STATUS "HOMM3_PLATFORM: ${HOMM3_PLATFORM}" )
+	message( STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}" )
 	# --------------------------
 endmacro()
 
