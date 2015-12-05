@@ -5,7 +5,7 @@ get_filename_component( HOMM3_ROOT_DIR "." ABSOLUTE )
 
 # cmake -G"Visual Studio 11" -DCMAKE_BUILD_TYPE=Debug
 # --------------------------
-# Messages to add
+
 
 #-------------------------------------------------------------------------------
 # define top-level options for the whole project
@@ -13,6 +13,7 @@ option( HOMM3_USE_THREAD "Enable thread support into HoMM3" ON )
 option( HOMM3_MEMORY_DEBUG "Enable memory debug implementation into HoMM3" ON )
 option( HOMM3_SHARED_LIB "Enable compile HoMM3 into shared lib" ON )
 #-------------------------------------------------------------------------------
+
 
 #-------------------------------------------------------------------------------
 # homm3_files(dirs ...)
@@ -41,6 +42,7 @@ macro(homm3_files project_name folder)
 		list( REMOVE_DUPLICATES ${project_name}_Sources )
 	endif()
 endmacro()
+
 
 #-------------------------------------------------------------------------------
 # homm3_setup()
@@ -170,4 +172,4 @@ homm3_setup()
 
 add_subdirectory( ${HOMM3_ROOT_DIR}/Dependencies/zlib-1.2.8 )
 add_subdirectory( ${HOMM3_ROOT_DIR}/HoMM3-Lod )
-#add_subdirectory( ${HOMM3_ROOT_DIR}/HoMM3-Lod-Test )
+add_subdirectory( ${HOMM3_ROOT_DIR}/HoMM3-Lod-Test )

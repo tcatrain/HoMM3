@@ -1,5 +1,6 @@
-﻿#include "Resource/Lod.hpp"
+#include "Resource/Lod.hpp"
 #include "Compression/ZHelper.hpp"
+#include <iterator>
 
 namespace HoMM3
 {
@@ -68,13 +69,14 @@ namespace HoMM3
 		/// <returns>The byte vector containing the entry</returns>
 		std::vector<byte> const Lod::ReadEntry(Lod::lod_eh const& eh)
 		{
-			bool is_compressed(eh.zsize == 0);
-			std::vector<byte> entry(is_compressed ? eh.size : eh.zsize);
-
-			this->ifs_.read(reinterpret_cast<char*>(entry.data()), entry.size());
-			return (is_compressed ? entry : HoMM3::Compression::ZHelper::Inflate(entry, eh.size));
-				
+			bool is_compressed(eh.zsize != 0);
+			std::vector<byte> entry(is_compressed ? eh.zsize : eh.size);
+			
+			this->ifs_.seekg(eh.offset, this->ifs_.beg);
+			this->ifs_.read(reinterpret_cast<char*>(&entry[0]), entry.size());
+			return (is_compressed ? HoMM3::Compression::ZHelper::Inflate(entry) : entry);
 		}
+
 	#pragma endregion
 
 
@@ -92,11 +94,11 @@ namespace HoMM3
 			os << "file.header_.nb=" << file.header_.nb << std::endl;
 			for (int i = 0; i < n; ++i)
 			{
-				os << "file.entries_headers_.[" << i << "].name=" << file.entries_headers_.at(i)->name << std::endl;
-				os << "file.entries_headers_.[" << i << "].offset=" << file.entries_headers_.at(i)->offset << std::endl;
-				os << "file.entries_headers_.[" << i << "].size=" << file.entries_headers_.at(i)->size << std::endl;
-				os << "file.entries_headers_.[" << i << "].type=" << file.entries_headers_.at(i)->type << std::endl;
-				os << "file.entries_headers_.[" << i << "].zsize=" << file.entries_headers_.at(i)->zsize << std::endl;
+				os << "file.entries_headers_.[" << i << "].name=" << file.entries_headers_[i]->name << std::endl;
+				os << "file.entries_headers_.[" << i << "].offset=" << file.entries_headers_[i]->offset << std::endl;
+				os << "file.entries_headers_.[" << i << "].size=" << file.entries_headers_[i]->size << std::endl;
+				os << "file.entries_headers_.[" << i << "].type=" << file.entries_headers_[i]->type << std::endl;
+				os << "file.entries_headers_.[" << i << "].zsize=" << file.entries_headers_[i]->zsize << std::endl;
 			}
 			return (os);
 		}

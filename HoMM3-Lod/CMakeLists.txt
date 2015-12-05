@@ -12,6 +12,8 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_SOURCE}
 	Resource/Lod.cpp
 	Compression/ZHelper.cpp
 )
+# --------------------------
+
 
 # --------------------------
 # Sources declaration : hpp
@@ -20,6 +22,8 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_INCLUDE}
 	Resource/Lod.hpp
 	Compression/ZHelper.hpp
 )
+# --------------------------
+
 
 # --------------------------
 # print build info
@@ -27,10 +31,10 @@ message( STATUS "HOMM3_LOD_ROOT_DIR: ${HOMM3_LOD_ROOT_DIR}" )
 message( STATUS "HOMM3_SHARED_LIB: ${HOMM3_SHARED_LIB}" )
 # --------------------------
 
+
 # --------------------------
 # Build section
 # --------------------------
-
 
 # Build as shared or static library
 if ( HOMM3_SHARED_LIB )
@@ -52,14 +56,3 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
 	PUBLIC zlib
 )
-
-#target_compile_features(${PROJECT_NAME}
-#	PUBLIC
-#		cxx_defaulted_functions
-#		cxx_delegating_constructors
-#		cxx_deleted_functions
-#		cxx_final
-#		cxx_nullptr
-#		cxx_override
-#		cxx_rvalue_references
-#)
