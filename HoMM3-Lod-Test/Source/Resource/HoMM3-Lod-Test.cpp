@@ -34,10 +34,10 @@ int main(int argc, char **argv)
 {
 	std::locale::global(std::locale(""));
 
-	if (argc == 0)
+	if (argc == 1)
 		return (EXIT_FAILURE);
 	
-	TEST_Lod(static_cast<std::string>(argv[1]));
+	TEST_Lod(argv[1]);
 	TEST_Compression("aaa");
 	return (EXIT_SUCCESS);
 }
