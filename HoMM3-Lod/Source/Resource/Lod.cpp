@@ -35,7 +35,7 @@ namespace HoMM3
 		/// and parses the file to locate content.
 		/// </summary>
 		/// <param name="path">Path of the LOD file to load</param>
-		Lod::Lod(char const* path) : ifs_(path, std::ios::binary)
+		Lod::Lod(std::string const& path) : ifs_(path, std::ios::binary)
 		{
 			this->LoadHeader();
 			this->LoadEntriesHeaders();

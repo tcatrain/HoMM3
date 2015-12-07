@@ -11,6 +11,7 @@ set(HOMM3_LOD_INCLUDE "${HOMM3_LOD_ROOT_DIR}/Include")
 homm3_files(${PROJECT_NAME} ${HOMM3_LOD_SOURCE}
 	Resource/Lod.cpp
 	Compression/ZHelper.cpp
+	Compression/ZBuffer.cpp
 )
 # --------------------------
 
@@ -21,6 +22,7 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_INCLUDE}
 	Types.hpp
 	Resource/Lod.hpp
 	Compression/ZHelper.hpp
+	Compression/ZBuffer.hpp
 )
 # --------------------------
 
@@ -41,10 +43,12 @@ if ( HOMM3_SHARED_LIB )
 	add_library(${PROJECT_NAME} SHARED 
 		${${PROJECT_NAME}_Sources}
 	)
+	set(ZLIB_LINK zlib)
 else()
 	add_library(${PROJECT_NAME} 
 		${${PROJECT_NAME}_Sources}
 	)
+	set(ZLIB_LINK zlibstatic)
 endif()
 
 # Add project's includes folder to the include directories
@@ -54,5 +58,5 @@ target_include_directories(${PROJECT_NAME}
 
 # Link required libraries to the project
 target_link_libraries(${PROJECT_NAME}
-	PUBLIC zlib
+	PUBLIC ${ZLIB_LINK}
 )

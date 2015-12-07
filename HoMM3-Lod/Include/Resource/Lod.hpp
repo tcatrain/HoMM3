@@ -1,8 +1,9 @@
 #pragma once
-#include <iostream>
 #include <fstream>
-#include <vector>
+#include <iostream>
 #include <memory>
+#include <string>
+#include <vector>
 #include "Types.hpp"
 
 namespace HoMM3
@@ -24,7 +25,7 @@ namespace HoMM3
 			struct lod_h
 			{
 				/// Size of an unknown portion of the LOD header
-				static const int LODH_UKWN_SIZE = 80;
+				static int const LODH_UKWN_SIZE = 80;
 
 				/// Key of the LOD file
 				uint key;
@@ -49,7 +50,7 @@ namespace HoMM3
 			struct lod_eh
 			{
 				/// Size of an entry name in a LOD file
-				static const int LODEH_NAME_SIZE = 16;
+				static int const LODEH_NAME_SIZE = 16;
 
 				/// Name if the entry
 				unsigned char name[LODEH_NAME_SIZE];
@@ -83,7 +84,7 @@ namespace HoMM3
 			/// and parses the file to locate content.
 			/// </summary>
 			/// <param name="path">Path of the LOD file to load</param>
-			Lod(char const*);
+			Lod(std::string const&);
 
 			/// <summary>
 			/// Destructor if the class Lod::File.
