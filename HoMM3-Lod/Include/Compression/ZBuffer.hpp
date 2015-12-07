@@ -8,25 +8,26 @@ namespace HoMM3
 {
 	namespace Compression
 	{
-		/// <summary>Class ZBuffer</summary>
-		class ZBuffer : public std::streambuf
+		/// <summary>Class ZipStreambuf</summary>
+		class ZipStreambuf : public std::basic_streambuf
 		{
-		/*private:
-			std::vector<byte> buf_;
-			z_stream zs_;
-				
+		private:
+			
+			
 		public:
-			/// Inflate mode used for decompression within instance scope
-			static int const ZFLATOR_INFLATE_MODE = 0;
-			/// Deflate mode used for compression within instance scope
-			static int const ZFLATOR_DEFLATE_MODE = 1;
-
-			ZBuffer(int const);
-			~ZBuffer();
-
-			void Append(std::vector<byte> const&);
-			std::vector<byte> Process();*/
-
+			ZipStreambuf(std::basic_ostream&);
+			~ZipStreambuf();
+		};
+		
+		/// <summary>Class UnzipStreambuf</summary>
+		class UnzipStreambuf : public std::basic_streambuf
+		{
+		private:
+			
+			
+		public:
+			UnzipStreambuf();
+			~UnzipStreambuf();
 		};
 	}
 }
