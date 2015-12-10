@@ -1,7 +1,7 @@
 #pragma once
-#include <vector>
 #include <streambuf>
-#include "zlib.h"
+#include <vector>
+#include <zlib.h>
 #include "Types.hpp"
 
 namespace HoMM3
