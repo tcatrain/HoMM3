@@ -6,7 +6,6 @@ namespace HoMM3
 {
 	namespace Resource
 	{
-	#pragma region private:
 		/// <summary>Method used to load the header of the LOD file</summary>
 		void Lod::LoadHeader()
 		{
@@ -26,10 +25,7 @@ namespace HoMM3
 				this->entries_headers_.push_back(std::move(up_eh));
 			}
 		}
-	#pragma endregion
 
-
-	#pragma region public:
 		/// <summary>
 		/// Constructor of the class Lod::File. Opens the input file stream
 		/// and parses the file to locate content.
@@ -77,10 +73,6 @@ namespace HoMM3
 			return (is_compressed ? HoMM3::Compression::ZHelper::Inflate(entry) : entry);
 		}
 
-	#pragma endregion
-
-
-	#pragma region friend:
 		/// <summary>Outstream operator overload used for writing</summary>
 		/// <param name="os">Output stream to write in by reference</param>
 		/// <param name="file">LOD file object by reference</param>
@@ -102,6 +94,5 @@ namespace HoMM3
 			}
 			return (os);
 		}
-	#pragma endregion
 	}
 }

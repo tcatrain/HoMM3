@@ -10,8 +10,8 @@ set(HOMM3_LOD_INCLUDE "${HOMM3_LOD_ROOT_DIR}/Include")
 # Sources declaration : cpp
 homm3_files(${PROJECT_NAME} ${HOMM3_LOD_SOURCE}
 	Resource/Lod.cpp
+    Resource/Deh.hpp
 	Compression/ZHelper.cpp
-	Compression/ZStreambuf.cpp
 )
 # --------------------------
 
@@ -21,8 +21,8 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_SOURCE}
 homm3_files(${PROJECT_NAME} ${HOMM3_LOD_INCLUDE}
 	Types.hpp
 	Resource/Lod.hpp
+    Resource/Def.hpp
 	Compression/ZHelper.hpp
-	Compression/ZStreambuf.hpp
 )
 # --------------------------
 
@@ -40,12 +40,12 @@ message( STATUS "HOMM3_SHARED_LIB: ${HOMM3_SHARED_LIB}" )
 
 # Build as shared or static library
 if ( HOMM3_SHARED_LIB )
-	add_library(${PROJECT_NAME} SHARED 
+	add_library(${PROJECT_NAME} SHARED
 		${${PROJECT_NAME}_Sources}
 	)
 	set(ZLIB_LINK zlib)
 else()
-	add_library(${PROJECT_NAME} 
+	add_library(${PROJECT_NAME}
 		${${PROJECT_NAME}_Sources}
 	)
 	set(ZLIB_LINK zlibstatic)

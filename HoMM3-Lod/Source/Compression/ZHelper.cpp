@@ -5,13 +5,10 @@ namespace HoMM3
 {
 	namespace Compression
 	{
-	#pragma region private:
 		/// Size increase ratio of the buffer to inflate in
 		const float ZHelper::INCREASE_RATIO = 1.1f;
-	#pragma endregion
-
-	#pragma region public:
-		/// <summary>Method used to inflate a deflated byte vector</summary>
+	
+        /// <summary>Method used to inflate a deflated byte vector</summary>
 		/// <param name="in_bytes">The input deflated byte vector</param>
 		/// <returns>The output inflated byte vector</returns>
 		std::vector<byte> const ZHelper::Inflate(std::vector<byte> const& in_bytes)
@@ -45,6 +42,5 @@ namespace HoMM3
 			out_bytes.shrink_to_fit();
 			return (out_bytes);
 		}
-	#pragma endregion
 	}
 }

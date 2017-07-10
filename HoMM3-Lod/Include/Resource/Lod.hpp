@@ -12,15 +12,14 @@ namespace HoMM3
 	{
 		/// <summary>Class Lod</summary>
 		class Lod
-		{
+        {
 			#pragma pack(push, 1)
 			/// <summary>
 			/// Structure lod_h (lod header)
 			/// 0x00 key of the file
-			/// 0x04 type of lod file
+			/// 0x04 type of the file
 			/// 0x08 number of file entries
 			/// 0x0C unknown byte array
-			/// 0x5C offset of file entries
 			/// </summary>
 			struct lod_h
 			{
@@ -42,7 +41,7 @@ namespace HoMM3
 			/// <summary>
 			/// Structure lod_eh (lod entry header)
 			/// 0x00 name of the entry
-			/// 0x10 offset of the entry into the lod file
+			/// 0x10 offset of the entry into the LOD file
 			/// 0x14 size of the decompressed file
 			/// 0x18 type of the file
 			/// 0x1C size of the compressed file
