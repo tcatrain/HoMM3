@@ -1,10 +1,8 @@
-// HoMM3-Lod-Test.cpp : Defines the entry point for the console application.
-//
-
-#include "Resource/Lod.hpp"
-#include "Compression/ZHelper.hpp"
 #include <string>
 #include <sstream>
+#include "Resource/Lod.hpp"
+#include "Resource/Def.hpp"
+#include "Compression/ZHelper.hpp"
 
 void TEST_Lod(std::string const& file, bool woupt)
 {
@@ -21,9 +19,12 @@ void TEST_Lod(std::string const& file, bool woupt)
     std::cout << std::endl;
 }
 
-void TEST_Def()
+void TEST_Def(std::string const& file)
 {
-    
+    HoMM3::Resource::Def sprite_content(file);
+        
+    std::cout << "---DEF FILE---" << std::endl << sprite_content << std::endl;
+    std::cout << std::endl;
 }
 
 void TEST_Compression(std::string const& str)
@@ -43,10 +44,11 @@ int main(int argc, char **argv)
 {
     std::locale::global(std::locale(""));
 
-    if (argc != 3)
+    if (argc != 4)
         return (EXIT_FAILURE);
     
-    TEST_Lod(argv[1], std::string("true").compare(argv[2]) == 0);
+    TEST_Lod(argv[1], std::string("true").compare(argv[3]) == 0);
+    TEST_Def(argv[2]);
     TEST_Compression("This is a deflated string");
     return (EXIT_SUCCESS);
 }

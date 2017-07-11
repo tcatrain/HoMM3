@@ -35,9 +35,7 @@ namespace HoMM3
         {
         }
     	
-        /// <summary>
-        /// Destructor if the class HoMM3::Resource::Lod.
-        /// </summary>
+        /// <summary>Destructor if the class HoMM3::Resource::Lod</summary>
         Lod::~Lod()
         {
             this->entries_headers_.clear();

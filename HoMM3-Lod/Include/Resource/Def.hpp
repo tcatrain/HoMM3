@@ -45,7 +45,7 @@ namespace HoMM3
         struct def_h
         {
             /// Size of the rgb palette of the DEF header
-            static int const DEFH_PAL_SIZE = 256;
+            static uint const DEFH_PAL_SIZE = 256;
             
             /// Type of the DEF file
             uint type;
@@ -56,7 +56,7 @@ namespace HoMM3
             /// Number of sequences in the DEF file
             uint nb;
             /// The RGB palette of the DEF sequence
-            def_clridx palt[DEFH_PAL_SIZE];
+            def_clridx palette[DEFH_PAL_SIZE];
         };
         #pragma pack(pop)
         
