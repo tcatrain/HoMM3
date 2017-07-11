@@ -22,14 +22,11 @@ namespace HoMM3
             std::ifstream ifs_;
         
             /// <summary>
-            /// Constructor of the class HoMM3::Resource::AResource. Opens the input file stream
-            /// and parses the file to locate content.
+            /// Constructor of the class HoMM3::Resource::AResource. Opens the input file stream.
             /// </summary>
             /// <param name="path">Path of the Resource file to load</param>
             AResource(const std::string& path) : ifs_(path, std::ios::binary)
             {
-                this->LoadHeader_();
-                this->LoadEntriesHeaders_();
             }
             
             /// <summary>Destructor if the class HoMM3::Resource::AResource</summary>
@@ -46,10 +43,10 @@ namespace HoMM3
             }
             
             /// <summary>Method used to load the entries headers of the Resource file</summary>
-            void LoadEntriesHeaders_()
+            virtual void LoadEntriesHeaders_()
             {
                 int n = this->header_.nb;
-    
+                
                 for (int i = 0; i < n; ++i)
                 {
                     std::unique_ptr<EntryHeader> up_eh(new EntryHeader());
@@ -67,6 +64,12 @@ namespace HoMM3
             virtual void Dump_(std::ostream&) const = 0;
             
         public:
+            void Load()
+            {
+                this->LoadHeader_();
+                this->LoadEntriesHeaders_();
+            }
+            
             /// <summary>Getter for Resource file header</summary>
             /// <returns>The Resource file header</returns>
             const Header& GetHeader() const

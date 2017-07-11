@@ -80,13 +80,24 @@ namespace HoMM3
         };
         #pragma pack(pop)
         
+        struct def_seq
+        {
+            byte name[13];
+            uint offset;
+        };
+        
         /// <summary>Class Def</summary>
         class Def : public AResource<def_h, def_seqh>
         {
         private:
+            std::vector<std::unique_ptr<def_seq>> sequences_;
+            
             /// <summary>Method used to dump the content of the Def object</summary>
     		/// <param name="os">The output stream where to write the dump</param>
-            void Dump_(std::ostream&) const override;
+            virtual void Dump_(std::ostream&) const override;
+            
+            /// <summary>Method used to load the entries headers of the DEF file</summary>
+            virtual void LoadEntriesHeaders_() override;
             
         public:
             /// <summary>
@@ -98,6 +109,8 @@ namespace HoMM3
             
             /// <summary>Destructor if the class HoMM3::Resource::Def</summary>
             ~Def();
+            
+            const std::vector<std::unique_ptr<def_seq>>& GetSequences() const;
             
             /// <summary>Method used to read an sequence from the DEF file</summary>
             /// <param name="seqh">The sequence header structure to read</param>

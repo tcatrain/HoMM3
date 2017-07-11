@@ -25,7 +25,7 @@ namespace HoMM3
                 os << "resource.entries_headers_.[" << i << "].zsize=" << this->entries_headers_[i]->zsize << std::endl;
             }
         }
-    	
+        
     	/// <summary>
         /// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream
         /// and parses the file to locate content.

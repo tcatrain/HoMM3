@@ -23,6 +23,37 @@ namespace HoMM3
             }
         }
         
+        /// <summary>Method used to load the entries headers of the DEF file</summary>
+        void Def::LoadEntriesHeaders_()
+        {
+            uint n = this->header_.nb;
+            for (uint i = 0; i < n; ++i)
+            {
+                std::cout << "OK 1" << std::endl;
+                std::unique_ptr<def_seqh> up_eh(new def_seqh());
+                this->ifs_.read(reinterpret_cast<char*>(up_eh.get()), sizeof(*up_eh));
+                std::cout << "OK 2" << std::endl;
+                for (uint j = 0; j < up_eh.get()->nb; ++j)
+                {
+                    std::unique_ptr<def_seq> up_seq(new def_seq());
+                    std::cout << "OK 3" << std::endl;
+                    if (j != 0)
+                    {
+                        this->ifs_.seekg(-sizeof(up_seq.get()->offset) * j, std::ios::cur);
+                        this->ifs_.seekg(-sizeof(up_seq.get()->name) * (up_eh.get()->nb - j), std::ios::cur);
+                    }
+                    this->ifs_.read(reinterpret_cast<char*>(&up_seq.get()->name), sizeof(up_seq.get()->name));
+                    this->ifs_.seekg(sizeof(up_seq.get()->name) * (up_eh.get()->nb - j - 1), std::ios::cur);
+                    this->ifs_.seekg(sizeof(up_seq.get()->offset) * j, std::ios::cur);
+                    this->ifs_.read(reinterpret_cast<char*>(&up_seq.get()->offset), sizeof(up_seq.get()->offset));
+                    std::cout << "OK 4" << std::endl;
+                    this->sequences_.push_back(std::move(up_seq));
+                }
+                
+                this->entries_headers_.push_back(std::move(up_eh));
+            }
+        }
+        
     	/// <summary>
         /// Constructor of the class HoMM3::Resource::Def. Opens the input file stream
         /// and parses the file to locate content.
@@ -39,6 +70,11 @@ namespace HoMM3
             this->ifs_.close();
         }
 
+        const std::vector<std::unique_ptr<def_seq>>& Def::GetSequences() const
+        {
+            return this->sequences_;
+        }
+        
         /// <summary>Method used to read an entry into the DEF file</summary>
         /// <param name="seqh">The sequence entry header structure to read</param>
         /// <returns>The byte vector containing the sequence</returns>

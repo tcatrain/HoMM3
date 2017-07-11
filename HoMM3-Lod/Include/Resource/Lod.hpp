@@ -68,7 +68,7 @@ namespace HoMM3
     	private:
     		/// <summary>Method used to dump the content of the Def object</summary>
     		/// <param name="os">The output stream where to write the dump</param>
-            void Dump_(std::ostream&) const override;
+            virtual void Dump_(std::ostream&) const override;
             
         public:
             /// <summary>
