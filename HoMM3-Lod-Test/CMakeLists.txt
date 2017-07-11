@@ -9,7 +9,7 @@ set(HOMM3_LOD_TEST_INCLUDE "${HOMM3_LOD_TEST_ROOT_DIR}/Include")
 # --------------------------
 # Sources declaration : cpp
 homm3_files(${PROJECT_NAME} ${HOMM3_LOD_TEST_SOURCE}
-	Resource/HoMM3-Lod-Test.cpp
+    Resource/HoMM3-Lod-Test.cpp
 )
 # --------------------------
 
@@ -32,17 +32,17 @@ message( STATUS "HOMM3_SHARED_LIB: ${HOMM3_SHARED_LIB}" )
 
 # Build as executable
 add_executable(${PROJECT_NAME}
-	${${PROJECT_NAME}_Sources}
+    ${${PROJECT_NAME}_Sources}
 )
 
 # Add project's includes folder to the include directories
 target_include_directories(${PROJECT_NAME}
-	PUBLIC
-	    ${HOMM3_LOD_TEST_ROOT_DIR}/Include
-	    ${HoMM3_Lod_SOURCE_DIR}/Include
+    PUBLIC
+        ${HOMM3_LOD_TEST_ROOT_DIR}/Include
+        ${HoMM3_Lod_SOURCE_DIR}/Include
 )
 
 # Link required libraries to the project
 target_link_libraries(${PROJECT_NAME}
-	PUBLIC HoMM3_Lod
+    PUBLIC HoMM3_Lod
 )

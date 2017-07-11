@@ -9,9 +9,9 @@ set(HOMM3_LOD_INCLUDE "${HOMM3_LOD_ROOT_DIR}/Include")
 # --------------------------
 # Sources declaration : cpp
 homm3_files(${PROJECT_NAME} ${HOMM3_LOD_SOURCE}
-	Resource/Lod.cpp
-  Resource/Def.cpp
-	Compression/ZHelper.cpp
+    Resource/Lod.cpp
+    Resource/Def.cpp
+    Compression/ZHelper.cpp
 )
 # --------------------------
 
@@ -19,10 +19,11 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_SOURCE}
 # --------------------------
 # Sources declaration : hpp
 homm3_files(${PROJECT_NAME} ${HOMM3_LOD_INCLUDE}
-	Types.hpp
-	Resource/Lod.hpp
-  Resource/Def.hpp
-	Compression/ZHelper.hpp
+    Types.hpp
+    Resource/AResource.hpp
+    Resource/Lod.hpp
+    Resource/Def.hpp
+    Compression/ZHelper.hpp
 )
 # --------------------------
 
@@ -40,23 +41,23 @@ message( STATUS "HOMM3_SHARED_LIB: ${HOMM3_SHARED_LIB}" )
 
 # Build as shared or static library
 if ( HOMM3_SHARED_LIB )
-	add_library(${PROJECT_NAME} SHARED
-		${${PROJECT_NAME}_Sources}
-	)
-	set(ZLIB_LINK zlib)
+    add_library(${PROJECT_NAME} SHARED
+        ${${PROJECT_NAME}_Sources}
+    )
+    set(ZLIB_LINK zlib)
 else()
-	add_library(${PROJECT_NAME}
-		${${PROJECT_NAME}_Sources}
-	)
-	set(ZLIB_LINK zlibstatic)
+    add_library(${PROJECT_NAME}
+        ${${PROJECT_NAME}_Sources}
+    )
+    set(ZLIB_LINK zlibstatic)
 endif()
 
 # Add project's includes folder to the include directories
 target_include_directories(${PROJECT_NAME}
-	PUBLIC ${HOMM3_LOD_ROOT_DIR}/Include ${zlib_SOURCE_DIR}
+    PUBLIC ${HOMM3_LOD_ROOT_DIR}/Include ${zlib_SOURCE_DIR}
 )
 
 # Link required libraries to the project
 target_link_libraries(${PROJECT_NAME}
-	PUBLIC ${ZLIB_LINK}
+    PUBLIC ${ZLIB_LINK}
 )
