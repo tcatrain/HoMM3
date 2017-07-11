@@ -1,9 +1,11 @@
 #pragma once
 #include <fstream>
-#include <vector>
+#include <iostream>
 #include <memory>
+#include <string>
+#include <vector>
+#include "Resource/AResource.hpp"
 #include "Types.hpp"
-
 namespace HoMM3
 {
     namespace Resource
@@ -79,15 +81,12 @@ namespace HoMM3
         #pragma pack(pop)
         
         /// <summary>Class Def</summary>
-        class Def
+        class Def : public AResource<def_h, def_seqh>
         {
         private:
-            /// The header of the DEF file
-            def_h header_;
-            /// The sequences headers of the DEF file
-            std::vector<std::unique_ptr<def_seqh>> entries_headers_;
-            /// The input file stream to the DEF file
-            std::ifstream ifs_;
+            /// <summary>Method used to dump the content of the Def object</summary>
+    		/// <param name="os">The output stream where to write the dump</param>
+            void Dump_(std::ostream&) const override;
             
         public:
             /// <summary>
@@ -95,26 +94,15 @@ namespace HoMM3
             /// and parses bytes to locate the sequences .
             /// </summary>
             /// <param name="bytes">Byte vector containing the DEF file to read</param>
-            Def(const std::vector<byte>&);
+            Def(const std::string&);
             
-            /// <summary>
-            /// Destructor if the class HoMM3::Resource::Lod.
-            /// </summary>
+            /// <summary>Destructor if the class HoMM3::Resource::Def</summary>
             ~Def();
             
             /// <summary>Method used to read an sequence from the DEF file</summary>
             /// <param name="seqh">The sequence header structure to read</param>
             /// <returns>The byte vector containing the sequence</returns>
-            std::vector<byte> ReadEntry(def_seqh const&);
-            
-            /// Declaring friend operator <<
-            friend std::ostream& operator <<(std::ostream&, const Def&);
+            const std::vector<byte> ReadEntry(const def_seqh&) override;
         };
-        
-        /// <summary>Outstream operator overload used for writing</summary>
-        /// <param name="os">Output stream to write in by reference</param>
-        /// <param name="file">DEF file object by reference</param>
-        /// <returns>The outstream given in input</returns>
-        std::ostream& operator <<(std::ostream&, const Def &);
     }
 }
