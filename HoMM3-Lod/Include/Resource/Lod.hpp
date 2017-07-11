@@ -73,20 +73,20 @@ namespace HoMM3
 			std::ifstream ifs_;
 		
 			/// <summary>Method used to load the header of the LOD file</summary>
-			void LoadHeader();
+			void LoadHeader_();
 			/// <summary>Method used to load the entries headers of the LOD file</summary>
-			void LoadEntriesHeaders();
+			void LoadEntriesHeaders_();
 
 		public:
 			/// <summary>
-			/// Constructor of the class Lod::File. Opens the input file stream
+			/// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream
 			/// and parses the file to locate content.
 			/// </summary>
 			/// <param name="path">Path of the LOD file to load</param>
 			Lod(std::string const&);
 
 			/// <summary>
-			/// Destructor if the class Lod::File.
+			/// Destructor if the class HoMM3::Resource::Lod.
 			/// </summary>
 			~Lod();
 
@@ -98,7 +98,7 @@ namespace HoMM3
 			/// <returns>The LOD file entries headers</returns>
 			std::vector<std::unique_ptr<lod_eh>> const& GetEntriesHeaders() const;
 
-			/// <summary>Method used to read an entry into the load file</summary>
+			/// <summary>Method used to read an entry into the LOD file</summary>
 			/// <param name="eh">The entry header structure to read</param>
 			/// <returns>The byte vector containing the entry</returns>
 			std::vector<byte> const ReadEntry(lod_eh const&);

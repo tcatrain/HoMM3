@@ -67,17 +67,65 @@ namespace HoMM3
             /// 0x04 length of the sequence
             /// 0x08 first unknown section
             /// 0x0C second unknown section
-            /// 0x10
             /// </summary>
             struct def_seqh
             {
-                
+                /// Type of the sequence
+                uint type;
+                /// Number of frames in the sequence
+                uint nb;
+                /// First unknown memory segment
+                uint unkwn1;
+                /// Second unknown memory segment
+                uint unkwn2;
             };
             #pragma pack(pop)
             
         private:
+            /// The header of the DEF file
             def_h header_;
+            /// The sequences headers of the DEF file
             std::vector<std::unique_ptr<def_seqh>> sequences_headers_;
+            
+            /// <summary>Method used to load the header of the DEF file</summary>
+            void LoadHeader_();
+            /// <summary>Method used to load the sequences headers of the DEF file</summary>
+            void LoadSequencesHeaders_();
+            
+        public:
+            /// <summary>
+            /// Constructor of the class HoMM3::Resource::Def. Reads the byte vector
+            /// and parses bytes to locate the sequences .
+            /// </summary>
+            /// <param name="bytes">Byte vector containing the DEF file to read</param>
+            Def(std::vector<byte> const&);
+            
+            /// <summary>
+            /// Destructor if the class HoMM3::Resource::Lod.
+            /// </summary>
+            ~Def();
+            
+            /// <summary>Getter for DEF file header</summary>
+            /// <returns>The DEF file header</returns>
+            def_h const& GetHeader() const;
+            
+            /// <summary>Getter for the DEF file sequences headers</summary>
+            /// <returns>The DEF file sequences headers</returns>
+            std::vector<std::unique_ptr<def_seqh>> const& GetSequencesHeaders() const;
+            
+            /// <summary>Method used to read an sequence from the DEF file</summary>
+            /// <param name="seqh">The sequence header structure to read</param>
+            /// <returns>The byte vector containing the sequence</returns>
+            std::vector<byte> ReadSequence(def_seqh const&);
+            
+            /// Declaring friend operator <<
+            friend std::ostream& operator <<(std::ostream&, const Def&);
         };
+        
+        /// <summary>Outstream operator overload used for writing</summary>
+        /// <param name="os">Output stream to write in by reference</param>
+        /// <param name="file">DEF file object by reference</param>
+        /// <returns>The outstream given in input</returns>
+        std::ostream& operator <<(std::ostream&, Def const&);
     }
 }

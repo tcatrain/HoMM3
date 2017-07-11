@@ -7,13 +7,13 @@ namespace HoMM3
 	namespace Resource
 	{
 		/// <summary>Method used to load the header of the LOD file</summary>
-		void Lod::LoadHeader()
+		void Lod::LoadHeader_()
 		{
 			this->ifs_.read(reinterpret_cast<char*>(&this->header_), sizeof(this->header_));
 		}
 
 		/// <summary>Method used to load the entries headers of the LOD file</summary>
-		void Lod::LoadEntriesHeaders()
+		void Lod::LoadEntriesHeaders_()
 		{
 			int n = this->header_.nb;
 
@@ -27,18 +27,18 @@ namespace HoMM3
 		}
 
 		/// <summary>
-		/// Constructor of the class Lod::File. Opens the input file stream
+		/// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream
 		/// and parses the file to locate content.
 		/// </summary>
 		/// <param name="path">Path of the LOD file to load</param>
 		Lod::Lod(std::string const& path) : ifs_(path, std::ios::binary)
 		{
-			this->LoadHeader();
-			this->LoadEntriesHeaders();
+			this->LoadHeader_();
+			this->LoadEntriesHeaders_();
 		}
 
 		/// <summary>
-		/// Destructor if the class Lod::File.
+		/// Destructor if the class HoMM3::Resource::Lod.
 		/// </summary>
 		Lod::~Lod()
 		{
@@ -60,7 +60,7 @@ namespace HoMM3
 			return (this->entries_headers_);
 		}
 
-		/// <summary>Method used to read an entry into the load file</summary>
+		/// <summary>Method used to read an entry into the LOD file</summary>
 		/// <param name="eh">The entry header structure to read</param>
 		/// <returns>The byte vector containing the entry</returns>
 		std::vector<byte> const Lod::ReadEntry(Lod::lod_eh const& eh)

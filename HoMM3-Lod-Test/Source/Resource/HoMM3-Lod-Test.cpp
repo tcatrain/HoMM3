@@ -21,6 +21,11 @@ void TEST_Lod(std::string const& file, bool woupt)
 	std::cout << std::endl;
 }
 
+void TEST_Def()
+{
+    
+}
+
 void TEST_Compression(std::string const& str)
 {
 	std::cout << "---TO DEFLATE---" << std::endl << str << std::endl;
