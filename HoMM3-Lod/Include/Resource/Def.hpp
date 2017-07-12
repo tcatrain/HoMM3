@@ -72,10 +72,10 @@ namespace HoMM3
         struct def_seqh
         {
             /// <summary>
-            /// 0x00 name of the sequence entry
-            /// 0x0C offset of the sequence entry
+            /// 0x00 name of the sequence frame
+            /// 0x0C offset of the sequence frame
             /// </summary>
-            struct def_seqeh
+            struct def_seqf
             {
                 /// Size of the name of a sequence entry
                 static uint const DEF_SEQEH_NAME_SIZE = 13;
@@ -95,8 +95,8 @@ namespace HoMM3
             uint unkwn1;
             /// Second unknown memory segment
             uint unkwn2;
-            /// The list of entries headers in the sequence
-            std::vector<std::unique_ptr<def_seqeh>> seq_entries_headers;
+            /// The list of frames in the sequence
+            std::vector<std::unique_ptr<def_seqf>> seq_frames;
         };
         #pragma pack(pop)
         
@@ -115,13 +115,13 @@ namespace HoMM3
             /// <param name="sequence_entry_header">Current sequence entry header to get the name for</param>
             /// <param name="current">Current iteration of name extraction</param>
             /// <param name="outof">Total expected iteration count</param>
-            void ReadNextName_(def_seqh::def_seqeh&, uint, uint);
+            void ReadNextName_(def_seqh::def_seqf&, uint, uint);
             
             /// <summary>Reads the next frame offset for the sequence</summary>
             /// <param name="sequence_entry_header">Current sequence entry header to get the offset for</param>
             /// <param name="current">Current iteration of offset extraction</param>
             /// <param name="outof">Total expected iteration count</param>
-            void ReadNextOffset_(def_seqh::def_seqeh&, uint, uint);
+            void ReadNextOffset_(def_seqh::def_seqf&, uint, uint);
             
         public:
             /// <summary>
@@ -134,10 +134,10 @@ namespace HoMM3
             /// <summary>Destructor if the class HoMM3::Resource::Def</summary>
             ~Def();
             
-            /// <summary>Method used to read an sequence from the DEF file</summary>
-            /// <param name="seqh">The sequence header structure to read</param>
-            /// <returns>The byte vector containing the sequence</returns>
-            const std::vector<byte> ReadEntry(const def_seqh&) override;
+            /// <summary>Method used to read a sequence frames from the DEF file</summary>
+            /// <param name="seqeh">The sequence header structure to read</param>
+            /// <returns>The vector containing the list of frame</returns>
+            const std::vector<std::vector<byte>> ReadEntry(const def_seqh&);
         };
     }
 }

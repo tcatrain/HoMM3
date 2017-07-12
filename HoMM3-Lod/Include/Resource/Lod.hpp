@@ -84,7 +84,7 @@ namespace HoMM3
             /// <summary>Method used to read an entry from the LO file</summary>
             /// <param name="eh">The entry header structure to read</param>
             /// <returns>The byte vector containing the entry</returns>
-            const std::vector<byte> ReadEntry(const lod_eh&) override;
+            const std::vector<byte> ReadEntry(const lod_eh&);
         };
     }
 }

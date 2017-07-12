@@ -92,11 +92,6 @@ namespace HoMM3
                 resource.Dump_(os);
                 return (os);
             }
-            
-            /// <summary>Method used to read an entry from the Resource file</summary>
-            /// <param name="eh">The entry header structure to read</param>
-            /// <returns>The byte vector containing the entry</returns>
-            virtual const std::vector<byte> ReadEntry(EntryHeader const&) = 0;
         };
     }
 }
