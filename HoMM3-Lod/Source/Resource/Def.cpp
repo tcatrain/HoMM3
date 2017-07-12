@@ -15,7 +15,7 @@ namespace HoMM3
             os << "resource.header_.width=" << this->header_.width << std::endl;
             os << "resource.header_.height=" << this->header_.height << std::endl;
             os << "resource.header_.nb=" << this->header_.nb << std::endl;
-            for (uint i = 0; i < Resource::def_h::DEFH_PAL_SIZE; ++i)
+            for (uint i = 0; i < Resource::DefHeader::DEFH_PAL_SIZE; ++i)
             { 
                 os << "resource.header_.palette[" << i << "].r=" << (unsigned) this->header_.palette[i].r << std::endl;
                 os << "resource.header_.palette[" << i << "].g=" << (unsigned) this->header_.palette[i].g << std::endl;
@@ -38,13 +38,13 @@ namespace HoMM3
         {
             for (uint i = 0, nseq = this->header_.nb; i < nseq; ++i)
             {
-                std::unique_ptr<def_seqh> up_eh(new def_seqh());
+                std::unique_ptr<DefSequenceHeader> up_eh(new DefSequenceHeader());
                 /// Read only the known fixed size of the header
-                this->ifs_.read(reinterpret_cast<char*>(&*up_eh), def_seqh::DEF_SEQH_FIXED_SIZE);
+                this->ifs_.read(reinterpret_cast<char*>(&*up_eh), DefSequenceHeader::DEF_SEQH_FIXED_SIZE);
                 /// The header should contain the number of frame in the sequence
                 for (uint j = 0, nfrm = up_eh->nb; j < nfrm; ++j)
                 {
-                    std::unique_ptr<def_seqh::def_seqf> up_seqf(new def_seqh::def_seqf());
+                    std::unique_ptr<DefSequenceFrame> up_seqf(new DefSequenceFrame());
                     this->ReadNextName_(*up_seqf, j, nfrm);
                     this->ReadNextOffset_(*up_seqf, j, nfrm);
                     up_eh->seq_frames.push_back(std::move(up_seqf));
@@ -57,7 +57,7 @@ namespace HoMM3
         /// <param name="sequence_entry_header">Current sequence entry header to get the name for</param>
         /// <param name="current">Current iteration of name extraction</param>
         /// <param name="outof">Total expected iteration count</param>
-        void Def::ReadNextName_(def_seqh::def_seqf& sequence_entry_header, uint current, uint outof)
+        void Def::ReadNextName_(DefSequenceFrame& sequence_entry_header, uint current, uint outof)
         {
             if (current != 0)
             {
@@ -72,7 +72,7 @@ namespace HoMM3
         /// <param name="sequence_entry_header">Current sequence entry header to get the offset for</param>
         /// <param name="current">Current iteration of offset extraction</param>
         /// <param name="outof">Total expected iteration count</param>
-        void Def::ReadNextOffset_(def_seqh::def_seqf& sequence_entry_header, uint current, uint outof)
+        void Def::ReadNextOffset_(DefSequenceFrame& sequence_entry_header, uint current, uint outof)
         {
             this->ifs_.seekg(sizeof(sequence_entry_header.name) * (outof - current - 1) + sizeof(sequence_entry_header.offset) * current, this->ifs_.cur);
             /// Read the frame offset
@@ -102,7 +102,7 @@ namespace HoMM3
         /// <summary>Method used to read a sequence frames from the DEF file</summary>
         /// <param name="seqeh">The sequence header structure to read</param>
         /// <returns>The vector containing the list of frame</returns>
-        const std::vector<std::vector<byte>> Def::ReadEntry(const def_seqh& seqh)
+        const std::vector<std::vector<byte>> Def::ReadEntry(const DefSequenceHeader& seqh)
         {
             std::vector<std::vector<byte>> frames;
             

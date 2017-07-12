@@ -12,12 +12,12 @@ namespace HoMM3
     {
         #pragma pack(push, 1)
         /// <summary>
-        /// Structure def_clridx (def color index)
+        /// Structure DefColorIndex
         /// 0x00 red index
         /// 0x01 green index
         /// 0x02 blue index
         /// </summary>
-        struct def_clridx
+        struct DefColorIndex
         {
             byte r;
             byte g;
@@ -27,7 +27,7 @@ namespace HoMM3
         
         #pragma pack(push, 1)
         /// <summary>
-        /// Structure def_h (def header)
+        /// Structure DefHeader
         /// 0x00 type the file in :
         ///     0x40 spell animation
         ///     0x42 creature in combat
@@ -42,7 +42,7 @@ namespace HoMM3
         /// 0x0C number of sequences
         /// 0x10 sequence's rgb palette
         /// </summary>
-        struct def_h
+        struct DefHeader
         {
             /// Size of the rgb palette of the DEF header
             static uint const DEFH_PAL_SIZE = 256;
@@ -56,34 +56,36 @@ namespace HoMM3
             /// Number of sequences in the DEF file
             uint nb;
             /// The RGB palette of the DEF sequence
-            def_clridx palette[DEFH_PAL_SIZE];
+            DefColorIndex palette[DEFH_PAL_SIZE];
         };
         #pragma pack(pop)
         
-        
+        /// <summary>
+        /// Structure DefSequenceFrame
+        /// 0x00 name of the sequence frame
+        /// 0x0C offset of the sequence frame
+        /// </summary>
+        struct DefSequenceFrame
+        {
+            /// Size of the name of a sequence entry
+            static uint const DEF_SEQEH_NAME_SIZE = 13;
+            
+            /// The name of the frame
+            byte name[DEF_SEQEH_NAME_SIZE];
+            /// The offset in the DEF file
+            uint offset;
+        };
         
         #pragma pack(push, 1)
         /// <summary>
+        /// Structure DefSequenceHeader
         /// 0x00 type of the sequence
         /// 0x04 length of the sequence
         /// 0x08 first unknown section
         /// 0x0C second unknown section
         /// </summary>
-        struct def_seqh
+        struct DefSequenceHeader
         {
-            /// <summary>
-            /// 0x00 name of the sequence frame
-            /// 0x0C offset of the sequence frame
-            /// </summary>
-            struct def_seqf
-            {
-                /// Size of the name of a sequence entry
-                static uint const DEF_SEQEH_NAME_SIZE = 13;
-            
-                byte name[DEF_SEQEH_NAME_SIZE];
-                uint offset;
-            };
-            
             /// Size of sequence section directly mappable from the resource
             static uint const DEF_SEQH_FIXED_SIZE = sizeof(uint) * 4;
             
@@ -96,12 +98,12 @@ namespace HoMM3
             /// Second unknown memory segment
             uint unkwn2;
             /// The list of frames in the sequence
-            std::vector<std::unique_ptr<def_seqf>> seq_frames;
+            std::vector<std::unique_ptr<DefSequenceFrame>> seq_frames;
         };
         #pragma pack(pop)
         
         /// <summary>Class Def</summary>
-        class Def : public AResource<def_h, def_seqh>
+        class Def : public AResource<DefHeader, DefSequenceHeader>
         {
         private:
             /// <summary>Method used to dump the content of the Def object</summary>
@@ -115,13 +117,13 @@ namespace HoMM3
             /// <param name="sequence_entry_header">Current sequence entry header to get the name for</param>
             /// <param name="current">Current iteration of name extraction</param>
             /// <param name="outof">Total expected iteration count</param>
-            void ReadNextName_(def_seqh::def_seqf&, uint, uint);
+            void ReadNextName_(DefSequenceFrame&, uint, uint);
             
             /// <summary>Reads the next frame offset for the sequence</summary>
             /// <param name="sequence_entry_header">Current sequence entry header to get the offset for</param>
             /// <param name="current">Current iteration of offset extraction</param>
             /// <param name="outof">Total expected iteration count</param>
-            void ReadNextOffset_(def_seqh::def_seqf&, uint, uint);
+            void ReadNextOffset_(DefSequenceFrame&, uint, uint);
             
         public:
             /// <summary>
@@ -137,7 +139,7 @@ namespace HoMM3
             /// <summary>Method used to read a sequence frames from the DEF file</summary>
             /// <param name="seqeh">The sequence header structure to read</param>
             /// <returns>The vector containing the list of frame</returns>
-            const std::vector<std::vector<byte>> ReadEntry(const def_seqh&);
+            const std::vector<std::vector<byte>> ReadEntry(const DefSequenceHeader&);
         };
     }
 }

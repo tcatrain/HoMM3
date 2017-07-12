@@ -13,13 +13,13 @@ namespace HoMM3
     {
         #pragma pack(push, 1)
         /// <summary>
-        /// Structure lod_h (lod header)
+        /// Structure LodHeader
         /// 0x00 key of the file
         /// 0x04 type of the file
         /// 0x08 number of file entries
         /// 0x0C unknown byte array
         /// </summary>
-        struct lod_h
+        struct LodHeader
         {
             /// Size of an unknown portion of the LOD header
             static int const LODH_UKWN_SIZE = 80;
@@ -37,14 +37,14 @@ namespace HoMM3
         
         #pragma pack(push, 1)
         /// <summary>
-        /// Structure lod_eh (lod entry header)
+        /// Structure LodEntryHeader
         /// 0x00 name of the entry
         /// 0x10 offset of the entry into the LOD file
         /// 0x14 size of the decompressed file
         /// 0x18 type of the file
         /// 0x1C size of the compressed file
         /// </summary>
-        struct lod_eh
+        struct LodEntryHeader
         {
             /// Size of an entry name in a LOD file
             static int const LODEH_NAME_SIZE = 16;
@@ -63,7 +63,7 @@ namespace HoMM3
         #pragma pack(pop)
 
         /// <summary>Class Lod</summary>
-        class Lod : public AResource<lod_h, lod_eh>
+        class Lod : public AResource<LodHeader, LodEntryHeader>
         {
     	private:
     		/// <summary>Method used to dump the content of the Def object</summary>
@@ -84,7 +84,7 @@ namespace HoMM3
             /// <summary>Method used to read an entry from the LO file</summary>
             /// <param name="eh">The entry header structure to read</param>
             /// <returns>The byte vector containing the entry</returns>
-            const std::vector<byte> ReadEntry(const lod_eh&);
+            const std::vector<byte> ReadEntry(const LodEntryHeader&);
         };
     }
 }
