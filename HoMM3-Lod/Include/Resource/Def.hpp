@@ -111,6 +111,18 @@ namespace HoMM3
             /// <summary>Method used to load the entries headers of the DEF file</summary>
             virtual void LoadEntriesHeaders_() override;
             
+            /// <summary>Reads the next frame name for the sequence</summary>
+            /// <param name="sequence_entry_header">Current sequence entry header to get the name for</param>
+            /// <param name="current">Current iteration of name extraction</param>
+            /// <param name="outof">Total expected iteration count</param>
+            void ReadNextName_(def_seqh::def_seqeh&, uint, uint);
+            
+            /// <summary>Reads the next frame offset for the sequence</summary>
+            /// <param name="sequence_entry_header">Current sequence entry header to get the offset for</param>
+            /// <param name="current">Current iteration of offset extraction</param>
+            /// <param name="outof">Total expected iteration count</param>
+            void ReadNextOffset_(def_seqh::def_seqeh&, uint, uint);
+            
         public:
             /// <summary>
             /// Constructor of the class HoMM3::Resource::Def. Reads the byte vector

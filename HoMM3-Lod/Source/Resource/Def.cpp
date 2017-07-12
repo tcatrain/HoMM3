@@ -11,8 +11,6 @@ namespace HoMM3
         /// <returns>The outstream given in input</returns>
         void Def::Dump_(std::ostream& os) const
         {
-            uint n = this->header_.nb;
-            
             os << "resource.header_.type=" << this->header_.type << std::endl;
             os << "resource.header_.width=" << this->header_.width << std::endl;
             os << "resource.header_.height=" << this->header_.height << std::endl;
@@ -23,11 +21,11 @@ namespace HoMM3
                 os << "resource.header_.palette[" << i << "].g=" << (unsigned) this->header_.palette[i].g << std::endl;
                 os << "resource.header_.palette[" << i << "].b=" << (unsigned) this->header_.palette[i].b << std::endl;
             }
-            for (uint i = 0; i < n; ++i)
+            for (uint i = 0, n = this->header_.nb; i < n; ++i)
             {
                 os << "resource.entries_headers_[" << i << "].type=" << this->entries_headers_[i]->type << std::endl;
                 os << "resource.entries_headers_[" << i << "].nb=" << this->entries_headers_[i]->nb << std::endl;
-                for (uint j = 0; j < this->entries_headers_[i]->nb; ++j)
+                for (uint j = 0, m = this->entries_headers_[i]->nb; j < m; ++j)
                 {
                     os << "resource.entries_headers_[" << i << "].sequence_header[" << j << "].name=" << this->entries_headers_[i]->seq_entries_headers[j]->name << std::endl;
                     os << "resource.entries_headers_[" << i << "].sequence_header[" << j << "].offset=" << this->entries_headers_[i]->seq_entries_headers[j]->offset << std::endl;
@@ -38,36 +36,51 @@ namespace HoMM3
         /// <summary>Method used to load the entries headers of the DEF file</summary>
         void Def::LoadEntriesHeaders_()
         {
-            uint nseq = this->header_.nb;
-            
-            for (uint i = 0; i < nseq; ++i)
+            for (uint i = 0, nseq = this->header_.nb; i < nseq; ++i)
             {
                 std::unique_ptr<def_seqh> up_eh(new def_seqh());
                 /// Read only the known fixed size of the header
-                this->ifs_.read(reinterpret_cast<char*>(up_eh.get()), def_seqh::DEF_SEQH_FIXED_SIZE);
+                this->ifs_.read(reinterpret_cast<char*>(&*up_eh), def_seqh::DEF_SEQH_FIXED_SIZE);
                 /// The header should contain the number of frame in the sequence
                 for (uint j = 0, nfrm = up_eh->nb; j < nfrm; ++j)
                 {
                     std::unique_ptr<def_seqh::def_seqeh> up_seqeh(new def_seqh::def_seqeh());
-                    if (j != 0)
-                    {
-                        /// If an offset was already read, the cursor must be repositionned to the next name to read
-                        this->ifs_.seekg(
-                            -sizeof(up_seqeh->offset) * j +
-                            -sizeof(up_seqeh->name) * (nfrm - j), std::ios::cur);
-                    }
-                    /// Read the frame name
-                    this->ifs_.read(reinterpret_cast<char*>(&up_seqeh->name), sizeof(up_seqeh->name));
-                    /// Go forward to the next offset to read
-                    this->ifs_.seekg(
-                        sizeof(up_seqeh->name) * (nfrm - j - 1) +
-                        sizeof(up_seqeh->offset) * j, std::ios::cur);
-                    /// Read the frame offset
-                    this->ifs_.read(reinterpret_cast<char*>(&up_seqeh->offset), sizeof(up_seqeh->offset));
+                    this->ReadNextName_(*up_seqeh, j, nfrm);
+                    this->ReadNextOffset_(*up_seqeh, j, nfrm);
                     up_eh->seq_entries_headers.push_back(std::move(up_seqeh));
                 }
                 this->entries_headers_.push_back(std::move(up_eh));
             }
+        }
+        
+        /// <summary>Reads the next frame name for the sequence</summary>
+        /// <param name="sequence_entry_header">Current sequence entry header to get the name for</param>
+        /// <param name="current">Current iteration of name extraction</param>
+        /// <param name="outof">Total expected iteration count</param>
+        void Def::ReadNextName_(def_seqh::def_seqeh& sequence_entry_header, uint current, uint outof)
+        {
+            if (current != 0)
+            {
+                /// If an offset was already read, the cursor must be repositionned to the next name to read
+                this->ifs_.seekg(
+                    -sizeof(sequence_entry_header.offset) * current +
+                    -sizeof(sequence_entry_header.name) * (outof - current), std::ios::cur);
+            }
+            /// Read the frame name
+            this->ifs_.read(reinterpret_cast<char*>(&sequence_entry_header.name), sizeof(sequence_entry_header.name));
+        }
+        
+        /// <summary>Reads the next frame offset for the sequence</summary>
+        /// <param name="sequence_entry_header">Current sequence entry header to get the offset for</param>
+        /// <param name="current">Current iteration of offset extraction</param>
+        /// <param name="outof">Total expected iteration count</param>
+        void Def::ReadNextOffset_(def_seqh::def_seqeh& sequence_entry_header, uint current, uint outof)
+        {
+            this->ifs_.seekg(
+                sizeof(sequence_entry_header.name) * (outof - current - 1) +
+                sizeof(sequence_entry_header.offset) * current, std::ios::cur);
+            /// Read the frame offset
+            this->ifs_.read(reinterpret_cast<char*>(&sequence_entry_header.offset), sizeof(sequence_entry_header.offset));
         }
         
     	/// <summary>
@@ -82,9 +95,7 @@ namespace HoMM3
         /// <summary>Destructor if the class HoMM3::Resource::Def</summary>
         Def::~Def()
         {
-            uint n = this->header_.nb;
-            
-            for (uint i = 0; i < n; ++i)
+            for (uint i = 0, n = this->header_.nb; i < n; ++i)
                 this->entries_headers_[i]->seq_entries_headers.clear();
             this->entries_headers_.clear();
             this->ifs_.close();

@@ -45,13 +45,11 @@ namespace HoMM3
             /// <summary>Method used to load the entries headers of the Resource file</summary>
             virtual void LoadEntriesHeaders_()
             {
-                int n = this->header_.nb;
-                
-                for (int i = 0; i < n; ++i)
+                for (int i = 0, n = this->header_.nb; i < n; ++i)
                 {
                     std::unique_ptr<EntryHeader> up_eh(new EntryHeader());
     
-                    this->ifs_.read(reinterpret_cast<char*>(up_eh.get()), sizeof(*up_eh));
+                    this->ifs_.read(reinterpret_cast<char*>(&*up_eh), sizeof(*up_eh));
                     this->entries_headers_.push_back(std::move(up_eh));
                 }
             }
