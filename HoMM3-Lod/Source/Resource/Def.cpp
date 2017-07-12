@@ -11,6 +11,8 @@ namespace HoMM3
         /// <returns>The outstream given in input</returns>
         void Def::Dump_(std::ostream& os) const
         {
+            uint n = this->header_.nb;
+            
             os << "resource.header_.type=" << this->header_.type << std::endl;
             os << "resource.header_.width=" << this->header_.width << std::endl;
             os << "resource.header_.height=" << this->header_.height << std::endl;
@@ -21,35 +23,49 @@ namespace HoMM3
                 os << "resource.header_.palette[" << i << "].g=" << (unsigned) this->header_.palette[i].g << std::endl;
                 os << "resource.header_.palette[" << i << "].b=" << (unsigned) this->header_.palette[i].b << std::endl;
             }
+            for (uint i = 0; i < n; ++i)
+            {
+                os << "resource.entries_headers_[" << i << "].type=" << this->entries_headers_[i]->type << std::endl;
+                os << "resource.entries_headers_[" << i << "].nb=" << this->entries_headers_[i]->nb << std::endl;
+                for (uint j = 0; j < this->entries_headers_[i]->nb; ++j)
+                {
+                    os << "resource.entries_headers_[" << i << "].sequence_header[" << j << "].name=" << this->entries_headers_[i]->seq_entries_headers[j]->name << std::endl;
+                    os << "resource.entries_headers_[" << i << "].sequence_header[" << j << "].offset=" << this->entries_headers_[i]->seq_entries_headers[j]->offset << std::endl;
+                }
+            }
         }
         
         /// <summary>Method used to load the entries headers of the DEF file</summary>
         void Def::LoadEntriesHeaders_()
         {
-            uint n = this->header_.nb;
-            for (uint i = 0; i < n; ++i)
+            uint nseq = this->header_.nb;
+            
+            for (uint i = 0; i < nseq; ++i)
             {
-                std::cout << "OK 1" << std::endl;
                 std::unique_ptr<def_seqh> up_eh(new def_seqh());
-                this->ifs_.read(reinterpret_cast<char*>(up_eh.get()), sizeof(*up_eh));
-                std::cout << "OK 2" << std::endl;
-                for (uint j = 0; j < up_eh.get()->nb; ++j)
+                /// Read only the known fixed size of the header
+                this->ifs_.read(reinterpret_cast<char*>(up_eh.get()), def_seqh::DEF_SEQH_FIXED_SIZE);
+                /// The header should contain the number of frame in the sequence
+                for (uint j = 0, nfrm = up_eh->nb; j < nfrm; ++j)
                 {
-                    std::unique_ptr<def_seq> up_seq(new def_seq());
-                    std::cout << "OK 3" << std::endl;
+                    std::unique_ptr<def_seqh::def_seqeh> up_seqeh(new def_seqh::def_seqeh());
                     if (j != 0)
                     {
-                        this->ifs_.seekg(-sizeof(up_seq.get()->offset) * j, std::ios::cur);
-                        this->ifs_.seekg(-sizeof(up_seq.get()->name) * (up_eh.get()->nb - j), std::ios::cur);
+                        /// If an offset was already read, the cursor must be repositionned to the next name to read
+                        this->ifs_.seekg(
+                            -sizeof(up_seqeh->offset) * j +
+                            -sizeof(up_seqeh->name) * (nfrm - j), std::ios::cur);
                     }
-                    this->ifs_.read(reinterpret_cast<char*>(&up_seq.get()->name), sizeof(up_seq.get()->name));
-                    this->ifs_.seekg(sizeof(up_seq.get()->name) * (up_eh.get()->nb - j - 1), std::ios::cur);
-                    this->ifs_.seekg(sizeof(up_seq.get()->offset) * j, std::ios::cur);
-                    this->ifs_.read(reinterpret_cast<char*>(&up_seq.get()->offset), sizeof(up_seq.get()->offset));
-                    std::cout << "OK 4" << std::endl;
-                    this->sequences_.push_back(std::move(up_seq));
+                    /// Read the frame name
+                    this->ifs_.read(reinterpret_cast<char*>(&up_seqeh->name), sizeof(up_seqeh->name));
+                    /// Go forward to the next offset to read
+                    this->ifs_.seekg(
+                        sizeof(up_seqeh->name) * (nfrm - j - 1) +
+                        sizeof(up_seqeh->offset) * j, std::ios::cur);
+                    /// Read the frame offset
+                    this->ifs_.read(reinterpret_cast<char*>(&up_seqeh->offset), sizeof(up_seqeh->offset));
+                    up_eh->seq_entries_headers.push_back(std::move(up_seqeh));
                 }
-                
                 this->entries_headers_.push_back(std::move(up_eh));
             }
         }
@@ -66,13 +82,12 @@ namespace HoMM3
         /// <summary>Destructor if the class HoMM3::Resource::Def</summary>
         Def::~Def()
         {
+            uint n = this->header_.nb;
+            
+            for (uint i = 0; i < n; ++i)
+                this->entries_headers_[i]->seq_entries_headers.clear();
             this->entries_headers_.clear();
             this->ifs_.close();
-        }
-
-        const std::vector<std::unique_ptr<def_seq>>& Def::GetSequences() const
-        {
-            return this->sequences_;
         }
         
         /// <summary>Method used to read an entry into the DEF file</summary>

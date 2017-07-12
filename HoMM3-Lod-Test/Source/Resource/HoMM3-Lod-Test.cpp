@@ -9,7 +9,7 @@ void TEST_Lod(std::string const& file, bool woupt)
     HoMM3::Resource::Lod txt_content(file);
     txt_content.Load();
     
-    std::vector<byte> entry = txt_content.ReadEntry(*txt_content.GetEntriesHeaders()[36].get());
+    std::vector<byte> entry = txt_content.ReadEntry(*txt_content.GetEntriesHeaders()[36]);
         
     std::cout << "---LOD FILE---" << std::endl << txt_content << std::endl;
     std::cout << "---ENTRY---" << std::endl;
@@ -32,13 +32,7 @@ void TEST_Def(std::string const& file, bool woupt)
     std::cout << "---SEQUENCE---" << std::endl;
     if (woupt)
     {
-        std::vector<std::unique_ptr<HoMM3::Resource::def_seq>>::const_iterator i;
-        uint count = 0;
-        for (i = sprite_content.GetSequences().begin(); i != sprite_content.GetSequences().end(); ++i, ++count)
-        {
-            std::cout << "def.sequence[" << count << "].name=" << i->get()->name << std::endl;
-            std::cout << "def.sequence[" << count << "].offset=" << i->get()->offset << std::endl;
-        }
+        
     }
     else
         std::cout << "Skipped" << std::endl;

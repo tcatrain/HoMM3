@@ -11,12 +11,12 @@ namespace HoMM3
         /// <returns>The outstream given in input</returns>
         void Lod::Dump_(std::ostream& os) const
         {
-            int n = this->header_.nb;
+            uint n = this->header_.nb;
 
             os << "resource.header_.key=" << this->header_.key << std::endl;
             os << "resource.header_.type=" << this->header_.type << std::endl;
             os << "resource.header_.nb=" << this->header_.nb << std::endl;
-            for (int i = 0; i < n; ++i)
+            for (uint i = 0; i < n; ++i)
             {
                 os << "resource.entries_headers_.[" << i << "].name=" << this->entries_headers_[i]->name << std::endl;
                 os << "resource.entries_headers_.[" << i << "].offset=" << this->entries_headers_[i]->offset << std::endl;
