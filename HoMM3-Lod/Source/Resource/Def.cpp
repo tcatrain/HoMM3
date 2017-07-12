@@ -1,4 +1,5 @@
 #include "Resource/Def.hpp"
+#include "Resource/Pcx.hpp"
 #include "Compression/ZHelper.hpp"
 
 namespace HoMM3
@@ -115,7 +116,7 @@ namespace HoMM3
                 /// Go back to the offset from the frame header
                 this->ifs_.seekg(seqh.seq_frames[i]->offset, this->ifs_.beg);
                 /// The whole pcx contains the frame + the header
-                std::vector<byte> frame(size + 32);
+                std::vector<byte> frame(size + sizeof(PcxHeader));
                 this->ifs_.read(reinterpret_cast<char*>(&frame[0]), frame.size());
                 frames.push_back(frame);
             }
