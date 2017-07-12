@@ -11,6 +11,7 @@ set(HOMM3_LOD_INCLUDE "${HOMM3_LOD_ROOT_DIR}/Include")
 homm3_files(${PROJECT_NAME} ${HOMM3_LOD_SOURCE}
     Resource/Lod.cpp
     Resource/Def.cpp
+    Resource/Pcx.cpp
     Compression/ZHelper.cpp
 )
 # --------------------------
@@ -23,6 +24,7 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_INCLUDE}
     Resource/AResource.hpp
     Resource/Lod.hpp
     Resource/Def.hpp
+    Resource/Pcx.hpp
     Compression/ZHelper.hpp
 )
 # --------------------------

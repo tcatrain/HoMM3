@@ -53,7 +53,11 @@ void TEST_Def(std::string const& file, bool woupt)
         entry = sprite_content.ReadEntry(*sprite_content.GetEntriesHeaders()[i]);
         if (woupt)
         {
-            // TODO dump the byte content
+            for (uint j = 0; j < entry.size(); ++j)
+            {
+                uint size = *reinterpret_cast<uint*>(&entry[j][0]);
+                std::cout << sprite_content.GetEntriesHeaders()[i]->seq_frames[j]->name << " has size " << size << std::endl;
+            }
         }
         else
         {

@@ -62,7 +62,7 @@ namespace HoMM3
             if (current != 0)
             {
                 /// If an offset was already read, the cursor must be repositionned to the next name to read
-                this->ifs_.seekg(-sizeof(sequence_entry_header.offset) * current + -sizeof(sequence_entry_header.name) * (outof - current), std::ios::cur);
+                this->ifs_.seekg(-sizeof(sequence_entry_header.offset) * current + -sizeof(sequence_entry_header.name) * (outof - current), this->ifs_.cur);
             }
             /// Read the frame name
             this->ifs_.read(reinterpret_cast<char*>(&sequence_entry_header.name), sizeof(sequence_entry_header.name));
@@ -74,7 +74,7 @@ namespace HoMM3
         /// <param name="outof">Total expected iteration count</param>
         void Def::ReadNextOffset_(def_seqh::def_seqf& sequence_entry_header, uint current, uint outof)
         {
-            this->ifs_.seekg(sizeof(sequence_entry_header.name) * (outof - current - 1) + sizeof(sequence_entry_header.offset) * current, std::ios::cur);
+            this->ifs_.seekg(sizeof(sequence_entry_header.name) * (outof - current - 1) + sizeof(sequence_entry_header.offset) * current, this->ifs_.cur);
             /// Read the frame offset
             this->ifs_.read(reinterpret_cast<char*>(&sequence_entry_header.offset), sizeof(sequence_entry_header.offset));
         }
@@ -104,12 +104,22 @@ namespace HoMM3
         /// <returns>The vector containing the list of frame</returns>
         const std::vector<std::vector<byte>> Def::ReadEntry(const def_seqh& seqh)
         {
-            std::vector<byte> frames;
-            for (uint i = 0, n = seqh.nb; i < n; ++i)
+            std::vector<std::vector<byte>> frames;
+            
+            for (uint i = 0, n = seqh.nb, size; i < n; ++i)
             {
-                std::cout << "Reading " << seqh.seq_frames[i]->name << std::endl;
+                /// Position the cursor to the offset from the frame header
+                this->ifs_.seekg(seqh.seq_frames[i]->offset, this->ifs_.beg);
+                /// Read the first uint containing the size of the frame
+                this->ifs_.read(reinterpret_cast<char*>(&size), sizeof(size));
+                /// Go back to the offset from the frame header
+                this->ifs_.seekg(seqh.seq_frames[i]->offset, this->ifs_.beg);
+                /// The whole pcx contains the frame + the header
+                std::vector<byte> frame(size + 32);
+                this->ifs_.read(reinterpret_cast<char*>(&frame[0]), frame.size());
+                frames.push_back(frame);
             }
-            return std::vector<std::vector<byte>>();
+            return frames;
         }
     }
 }
