@@ -12,24 +12,24 @@ namespace HoMM3
         /// <returns>The outstream given in input</returns>
         void Def::Dump_(std::ostream& os) const
         {
-            os << "resource.header_.type=" << this->header_.type << std::endl;
-            os << "resource.header_.width=" << this->header_.width << std::endl;
-            os << "resource.header_.height=" << this->header_.height << std::endl;
-            os << "resource.header_.nb=" << this->header_.nb << std::endl;
+            os << "def.header_.type=" << this->header_.type << std::endl;
+            os << "def.header_.width=" << this->header_.width << std::endl;
+            os << "def.header_.height=" << this->header_.height << std::endl;
+            os << "def.header_.nb=" << this->header_.nb << std::endl;
             for (uint i = 0; i < Resource::DefHeader::DEFH_PAL_SIZE; ++i)
             { 
-                os << "resource.header_.palette[" << i << "].r=" << (unsigned) this->header_.palette[i].r << std::endl;
-                os << "resource.header_.palette[" << i << "].g=" << (unsigned) this->header_.palette[i].g << std::endl;
-                os << "resource.header_.palette[" << i << "].b=" << (unsigned) this->header_.palette[i].b << std::endl;
+                os << "def.header_.palette[" << i << "].r=" << (unsigned) this->header_.palette[i].r << std::endl;
+                os << "def.header_.palette[" << i << "].g=" << (unsigned) this->header_.palette[i].g << std::endl;
+                os << "def.header_.palette[" << i << "].b=" << (unsigned) this->header_.palette[i].b << std::endl;
             }
             for (uint i = 0, n = this->header_.nb; i < n; ++i)
             {
-                os << "resource.entries_headers_[" << i << "].type=" << this->entries_headers_[i]->type << std::endl;
-                os << "resource.entries_headers_[" << i << "].nb=" << this->entries_headers_[i]->nb << std::endl;
+                os << "def.entries_headers_[" << i << "].type=" << this->entries_headers_[i]->type << std::endl;
+                os << "def.entries_headers_[" << i << "].nb=" << this->entries_headers_[i]->nb << std::endl;
                 for (uint j = 0, m = this->entries_headers_[i]->nb; j < m; ++j)
                 {
-                    os << "resource.entries_headers_[" << i << "].sequence_header[" << j << "].name=" << this->entries_headers_[i]->seq_frames[j]->name << std::endl;
-                    os << "resource.entries_headers_[" << i << "].sequence_header[" << j << "].offset=" << this->entries_headers_[i]->seq_frames[j]->offset << std::endl;
+                    os << "def.entries_headers_[" << i << "].sequence_header[" << j << "].name=" << this->entries_headers_[i]->seq_frames[j]->name << std::endl;
+                    os << "def.entries_headers_[" << i << "].sequence_header[" << j << "].offset=" << this->entries_headers_[i]->seq_frames[j]->offset << std::endl;
                 }
             }
         }
@@ -96,14 +96,12 @@ namespace HoMM3
             {
                 this->entries_headers_[i]->seq_frames.clear();
             }
-            this->entries_headers_.clear();
-            this->ifs_.close();
         }
         
         /// <summary>Method used to read a sequence frames from the DEF file</summary>
         /// <param name="seqeh">The sequence header structure to read</param>
         /// <returns>The vector containing the list of frame</returns>
-        const std::vector<std::vector<byte>> Def::ReadEntry(const DefSequenceHeader& seqh)
+        const std::vector<std::vector<byte>> Def::ReadSequence(const DefSequenceHeader& seqh)
         {
             std::vector<std::vector<byte>> frames;
             

@@ -12,6 +12,7 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_SOURCE}
     Resource/Def.cpp
     Resource/Pcx.cpp
     Compression/ZHelper.cpp
+		Compression/RLEHelper.cpp
 )
 # --------------------------
 
@@ -25,6 +26,7 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_INCLUDE}
     Resource/Def.hpp
     Resource/Pcx.hpp
     Compression/ZHelper.hpp
+		Compression/RLEHelper.hpp
 )
 # --------------------------
 
@@ -64,8 +66,8 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 # copy of dll from zlib
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	$<TARGET_FILE:${ZLIB_LINK}>              
+	$<TARGET_FILE:${ZLIB_LINK}>
 	$<TARGET_FILE_DIR:${PROJECT_NAME}>
 )

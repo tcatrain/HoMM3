@@ -81,10 +81,7 @@ namespace HoMM3
             /// <param name="path">Path of the LOD file to load</param>
             Lod(const std::string&);
 
-            /// <summary>Destructor if the class HoMM3::Resource::Lod</summary>
-            ~Lod();
-
-            /// <summary>Method used to read an entry from the LO file</summary>
+            /// <summary>Method used to read an entry from the LOD file</summary>
             /// <param name="eh">The entry header structure to read</param>
             /// <returns>The byte vector containing the entry</returns>
             const std::vector<byte> ReadEntry(const LodEntryHeader&);

@@ -13,16 +13,16 @@ namespace HoMM3
         {
             uint n = this->header_.nb;
 
-            os << "resource.header_.key=" << this->header_.key << std::endl;
-            os << "resource.header_.type=" << this->header_.type << std::endl;
-            os << "resource.header_.nb=" << this->header_.nb << std::endl;
+            os << "lod.header_.key=" << this->header_.key << std::endl;
+            os << "lod.header_.type=" << this->header_.type << std::endl;
+            os << "lod.header_.nb=" << this->header_.nb << std::endl;
             for (uint i = 0; i < n; ++i)
             {
-                os << "resource.entries_headers_.[" << i << "].name=" << this->entries_headers_[i]->name << std::endl;
-                os << "resource.entries_headers_.[" << i << "].offset=" << this->entries_headers_[i]->offset << std::endl;
-                os << "resource.entries_headers_.[" << i << "].size=" << this->entries_headers_[i]->size << std::endl;
-                os << "resource.entries_headers_.[" << i << "].type=" << this->entries_headers_[i]->type << std::endl;
-                os << "resource.entries_headers_.[" << i << "].zsize=" << this->entries_headers_[i]->zsize << std::endl;
+                os << "lod.entries_headers_.[" << i << "].name=" << this->entries_headers_[i]->name << std::endl;
+                os << "lod.entries_headers_.[" << i << "].offset=" << this->entries_headers_[i]->offset << std::endl;
+                os << "lod.entries_headers_.[" << i << "].size=" << this->entries_headers_[i]->size << std::endl;
+                os << "lod.entries_headers_.[" << i << "].type=" << this->entries_headers_[i]->type << std::endl;
+                os << "lod.entries_headers_.[" << i << "].zsize=" << this->entries_headers_[i]->zsize << std::endl;
             }
         }
         
@@ -45,13 +45,6 @@ namespace HoMM3
         /// <param name="path">Path of the LOD file to load</param>
         Lod::Lod(const std::string& path) : AResource(path)
         {
-        }
-    	
-        /// <summary>Destructor if the class HoMM3::Resource::Lod</summary>
-        Lod::~Lod()
-        {
-            this->entries_headers_.clear();
-            this->ifs_.close();
         }
 
         /// <summary>Method used to read an entry into the LOD file</summary>
