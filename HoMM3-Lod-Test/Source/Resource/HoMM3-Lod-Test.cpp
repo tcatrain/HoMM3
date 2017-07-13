@@ -51,18 +51,20 @@ void TEST_Def(std::string const& file, bool woupt)
     {
         std::cout << "---SEQUENCE " << sprite_content.GetEntriesHeaders()[i]->type << "---" << std::endl;
         entry = sprite_content.ReadEntry(*sprite_content.GetEntriesHeaders()[i]);
-        if (woupt)
-        {
-            for (uint j = 0; j < entry.size(); ++j)
-            {
-                uint size = *reinterpret_cast<uint*>(&entry[j][0]);
+            for (uint j = 0; j < entry.size(); ++j) {
+                uint size = *reinterpret_cast<uint *>(&entry[j][0]);
                 std::cout << sprite_content.GetEntriesHeaders()[i]->seq_frames[j]->name << " has size " << size << std::endl;
+                if (woupt)
+                {
+
+                }
+                else
+                {
+                    std::cout << "\tSkipped because byte dump is not required" << std::endl;
+                }
             }
-        }
-        else
-        {
-            std::cout << "Skipped because byte dump is not required" << std::endl;
-        }
+
+
     }
     
     std::cout << std::endl;
