@@ -103,7 +103,7 @@ namespace HoMM3
         #pragma pack(pop)
         
         /// <summary>Class Def</summary>
-        class Def : public AResource<DefHeader, DefSequenceHeader>
+        class HOMM3_LOD_LIB Def : public AResource<DefHeader, DefSequenceHeader>
         {
         private:
             /// <summary>Method used to dump the content of the Def object</summary>

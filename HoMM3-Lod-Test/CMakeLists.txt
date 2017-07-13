@@ -46,3 +46,17 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PUBLIC HoMM3_Lod
 )
+
+# copy of dll from HoMM3_Lod
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	$<TARGET_FILE:HoMM3_Lod>              
+	$<TARGET_FILE_DIR:${PROJECT_NAME}>
+)
+
+# copy of dll from zlib (only working if zlib is build with the project)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	$<TARGET_FILE:zlib>              
+	$<TARGET_FILE_DIR:${PROJECT_NAME}>
+)

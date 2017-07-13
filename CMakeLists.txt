@@ -119,7 +119,8 @@ macro(homm3_setup)
         set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unknown-pragmas" )
     elseif( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" )
         list( APPEND HOMM3_PLATFORM_DEFINES -DCOMPILER_MSVC )
-        set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} /W4" )
+        set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} /W4 /DEBUG /Od /ZI" )
+		set( CMAKE_EXE_LINKER_FLAGS_DEBUG "/DEBUG" )
     endif()
     # --------------------------
     
@@ -170,6 +171,8 @@ endmacro()
 project( HoMM3 C CXX )
 homm3_setup()
 
+
 add_subdirectory( ${HOMM3_ROOT_DIR}/Dependencies/zlib-1.2.8 )
+set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/zlib-1.2.8)
 add_subdirectory( ${HOMM3_ROOT_DIR}/HoMM3-Lod )
 add_subdirectory( ${HOMM3_ROOT_DIR}/HoMM3-Lod-Test )

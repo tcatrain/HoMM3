@@ -9,7 +9,7 @@ namespace HoMM3
     namespace Compression
     {
         /// <summary>Class ZHelper</summary>
-        class ZHelper
+        class HOMM3_LOD_LIB ZHelper
         {
         private:
 
