@@ -19,7 +19,7 @@ namespace HoMM3
         /// 0x08 number of file entries
         /// 0x0C unknown byte array
         /// </summary>
-        struct LodHeader
+        struct HOMM3_LOD_LIB LodHeader
         {
             /// Size of an unknown portion of the LOD header
             static int const LODH_UKWN_SIZE = 80;
@@ -44,7 +44,7 @@ namespace HoMM3
         /// 0x18 type of the file
         /// 0x1C size of the compressed file
         /// </summary>
-        struct LodEntryHeader
+        struct HOMM3_LOD_LIB LodEntryHeader
         {
             /// Size of an entry name in a LOD file
             static int const LODEH_NAME_SIZE = 16;
@@ -63,7 +63,7 @@ namespace HoMM3
         #pragma pack(pop)
 
         /// <summary>Class Lod</summary>
-        class Lod : public AResource<LodHeader, LodEntryHeader>
+        class HOMM3_LOD_LIB Lod : public AResource<LodHeader, LodEntryHeader>
         {
     	private:
     		/// <summary>Method used to dump the content of the Def object</summary>
