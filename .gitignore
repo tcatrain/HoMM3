@@ -13,6 +13,12 @@ HoMM3-Lod-Test/HoMM3_Lod_Test
 *.build*
 
 ## --------------------------
+## CLion project files
+## --------------------------
+*.idea
+cmake-build*
+
+## --------------------------
 ## Visual studio project files
 ## --------------------------
 *.vcxproj
@@ -35,6 +41,7 @@ cmake_install.cmake
 ## --------------------------
 *.so
 *.a
+*.included
 Makefile
 
 ## --------------------------
