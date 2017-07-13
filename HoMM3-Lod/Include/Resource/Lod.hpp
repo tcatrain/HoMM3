@@ -70,6 +70,9 @@ namespace HoMM3
     		/// <param name="os">The output stream where to write the dump</param>
             virtual void Dump_(std::ostream&) const override;
             
+            /// <summary>Method used to load the entries headers of the LOD file</summary>
+            virtual void LoadEntriesHeaders_() override;
+            
         public:
             /// <summary>
             /// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream

@@ -26,6 +26,18 @@ namespace HoMM3
             }
         }
         
+        /// <summary>Method used to load the entries headers of the LOD file</summary>
+        void Lod::LoadEntriesHeaders_()
+        {
+            for (int i = 0, n = this->header_.nb; i < n; ++i)
+            {
+                std::unique_ptr<LodEntryHeader> up_eh(new LodEntryHeader());
+                
+                this->ifs_.read(reinterpret_cast<char*>(&*up_eh), sizeof(*up_eh));
+                this->entries_headers_.push_back(std::move(up_eh));
+            }
+        }
+        
     	/// <summary>
         /// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream
         /// and parses the file to locate content.
