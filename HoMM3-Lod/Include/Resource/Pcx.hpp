@@ -10,8 +10,8 @@ namespace HoMM3
         struct PcxHeader {
             uint size;
             uint type;
-            uint width;
-            uint height;
+            uint flwidth;
+            uint flheight;
             uint fmwidth;
             uint fmheight;
             uint xmargin;
@@ -39,7 +39,7 @@ namespace HoMM3
             
             /// <summary>Method used to read an entry from the PCX file</summary>
             /// <param name="eh">The frame header structure to read</param>
-            /// <returns>The byte vector containing the frame</returns>
+            /// <returns>The byte vector containing the bitmap frame</returns>
             const std::vector<byte> ReadFrame(const PcxHeader&);
         };
         
