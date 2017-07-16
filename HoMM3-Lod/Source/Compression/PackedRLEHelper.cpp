@@ -46,48 +46,67 @@ namespace HoMM3
         const std::vector<byte> PackedRLEHelper::Deflate(const std::vector<byte> &in_bytes)
         {
             std::vector<byte> out_bytes, chunk_bytes;
+            usint chunk_offset;
             
             for (uint i = 0; i < this->unpked_size_ / this->chunk_size_; ++i)
             {
-                chunk_bytes = this->DoChunk_(in_bytes, *reinterpret_cast<const usint*>(&in_bytes[i * sizeof(usint)]));
+                /// Reads the next 2 bytes to get the offset of the next chunk within the sequence
+                chunk_offset = *reinterpret_cast<const usint*>(&in_bytes[i * sizeof(usint)]);
+                /// Then position the cursor to the byte sequence starting at $offset
+                chunk_bytes = this->UnpackChunk_(in_bytes.data() + chunk_offset);
                 out_bytes.insert(out_bytes.cend(), chunk_bytes.begin(), chunk_bytes.end());
             }
             return out_bytes;
         }
         
-        const std::vector<byte> PackedRLEHelper::DoChunk_(const std::vector<byte>& in_bytes, usint lnoffset)
+        /// <summary>Method used to unpack the chunk starting at a provided address</summary>
+        /// <param name="chunk_addr">The address of the chunk to process</param>
+        /// <returns>The vector containing chunk's bytes</returns>
+        const std::vector<byte> PackedRLEHelper::UnpackChunk_(const byte* chunk_addr)
         {
             std::vector<byte> chunk_bytes;
-            uint rowlength = 0, offset = 0, length;
-            byte *buf;
+            uint rowlength = 0, length;
+            
+            this->nb_read_ = 0;
             do
             {
-                length = this->DoRLEUnpacking_(in_bytes.data() + lnoffset, &offset, &buf);
-                chunk_bytes.insert(chunk_bytes.cend(), buf, buf + length);
+                length = this->UnpackNext_(chunk_addr);
+                /// Appends the buffer to the end of chunk bytes
+                chunk_bytes.insert(chunk_bytes.cend(), this->buffer_, this->buffer_ + length);
                 rowlength += length;
-                ++offset;
             } while(rowlength < 32);
             return chunk_bytes;
         }
         
-        uint PackedRLEHelper::DoRLEUnpacking_(const byte* in_bytes, uint* offset, byte** buffer)
+        /// <summary>Method used to unpack the next sequence for the current chunk</summary>
+        /// <param name="chunk_addr">The address of the chunk to process</param>
+        /// <returns>The length of the unpacked segment</returns>
+        uint PackedRLEHelper::UnpackNext_(const byte* chunk_addr)
         {
-            byte current = *(in_bytes + *offset);
+            /// Reads the next byte from the sequence to read
+            byte current = *(chunk_addr + this->nb_read_);
+            /// The length of the sequence is defined in the last 5 bits of the byte
             uint length = (current & 0x1F) + 1;
-            *buffer = new byte[length];
+            /// The key of the sequence is defined in the first 3 bits if the byte
+            uint key = current >> 5;
+            this->buffer_ = new byte[length];
             
-            if ((current >> 5) == 7)
+            /// If the key is bin(111), the sequence must be read as is from the inpyt
+            if (key == 7)
             {
                 for (uint j = 0; j < length; ++j)
                 {
-                    (*buffer)[j] = *(in_bytes + *offset + j);
+                    /// Reads the next $length bytes as the output sequence
+                    this->buffer_[j] = *(chunk_addr + this->nb_read_ + j);
                 }
-                *offset += length;
+                this->nb_read_ += length;
             }
             else
             {
-                std::fill_n(*buffer, length, current >> 5);
+                /// If the key is not bin(111), then the sequence is a repetition of $length $key
+                std::fill_n(this->buffer_, length, key);
             }
+            this->nb_read_++;
             return length;
         }
     }

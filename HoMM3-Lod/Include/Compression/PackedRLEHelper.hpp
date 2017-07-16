@@ -16,9 +16,21 @@ namespace HoMM3
             uint unpked_size_;
             /// The minimal size to consider a chunk to be unpacked
             uint unpked_minsize_;
+            /// The number of byte read into the current chunk
+            uint nb_read_;
+            /// The buffer to store unpacked bytes
+            byte* buffer_;
             
-            const std::vector<byte> DoChunk_(const std::vector<byte>&, usint);
-            uint DoRLEUnpacking_(const byte*, uint*, byte**);
+            /// <summary>Method used to unpack the chunk starting at a provided address</summary>
+            /// <param name="chunk_addr">The address of the chunk to process</param>
+            /// <returns>The vector containing chunk's bytes</returns>
+            const std::vector<byte> UnpackChunk_(const byte*);
+            
+            /// <summary>Method used to unpack the next sequence for the current chunk</summary>
+            /// <param name="chunk_addr">The address of the chunk to process</param>
+            /// <returns>The length of the unpacked segment</returns>
+            uint UnpackNext_(const byte*);
+            
         public:
             /// <summary>Sets the size of a byte chunk</summary>
             /// <param name="cnk_size">The chunk size</param>
