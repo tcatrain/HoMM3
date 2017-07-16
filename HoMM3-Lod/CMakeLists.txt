@@ -12,7 +12,7 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_SOURCE}
     Resource/Def.cpp
     Resource/Pcx.cpp
     Compression/ZHelper.cpp
-		Compression/RLEHelper.cpp
+    Compression/PackedRLEHelper.cpp
 )
 # --------------------------
 
@@ -25,8 +25,9 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_INCLUDE}
     Resource/Lod.hpp
     Resource/Def.hpp
     Resource/Pcx.hpp
+    Compression/ACompresionHelper.hpp
     Compression/ZHelper.hpp
-		Compression/RLEHelper.hpp
+    Compression/PackedRLEHelper.hpp
 )
 # --------------------------
 

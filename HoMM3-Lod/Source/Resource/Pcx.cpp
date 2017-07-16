@@ -20,12 +20,26 @@ namespace HoMM3
             os << "pcx.header_.ymargin=" << this->header_.ymargin << std::endl;
         }
         
+        /// <summary>Method used to load the header of the PCX file and set the compressor context</summary>
+        void Pcx::LoadHeader_()
+        {
+            this->AResource::LoadHeader_();
+            this->rlecompressor_.SetChunkSize(32);
+            this->rlecompressor_.SetUnpackedSize(this->header_.fmheight * this->header_.fmwidth);
+            this->rlecompressor_.SetUnpackedChunkSize(32);
+        }
+        
         /// <summary>Method used to load the entries headers of the LOD file</summary>
         void Pcx::LoadEntriesHeaders_()
         {
             /// Nothing to do here
         }
         
+        /// <summary>
+        /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream
+        /// and parses the file to locate content.
+        /// </summary>
+        /// <param name="path">Path of the PCX file to load</param>
         Pcx::Pcx(const std::string& path) : AResource(path)
         {
             
@@ -36,42 +50,12 @@ namespace HoMM3
         /// <returns>The byte vector containing the bitmap frame</returns>
         const std::vector<byte> Pcx::ReadFrame(const PcxHeader& ph)
         {
-            std::vector<byte> pixels;
-            byte nextbyte;
-            uint length;
+            byte buf[ph.size];
             
-            for (uint i = 0; i < ph.fmheight; ++i)
-            {
-                usint lnoffsets[ph.fmwidth / 32];
-                this->ifs_.read(reinterpret_cast<char*>(&lnoffsets), sizeof(lnoffsets));
-                for (uint j = 0, rowlength = 32; j < ph.fmwidth / 32; ++j)
-                {
-                    this->ifs_.seekg(lnoffsets[j] + sizeof(ph), this->ifs_.beg);
-                    do
-                    {
-                        this->ifs_.read(reinterpret_cast<char*>(&nextbyte), sizeof(nextbyte));
-                        length = (nextbyte & 0x1F) + 1;
-                        byte buf[length];
-                        
-                        if ((nextbyte & 0xE0) == 0xE0)
-                        {
-                            this->ifs_.read(reinterpret_cast<char*>(&buf), sizeof(buf));
-                        }
-                        else
-                        {
-                            for (uint k = 0; k < length; ++k)
-                            {
-                                buf[k] = nextbyte & 0xE0;
-                            }
-                        }
-                        pixels.insert(pixels.cend(), buf, buf + length);
-                        rowlength += length;
-                    } while(rowlength < 32);
-                    rowlength = 0;
-                }
-                this->ifs_.seekg(sizeof(ph) + (i + 1) * sizeof(lnoffsets), this->ifs_.beg);
-            }
-            return pixels;
+            this->ifs_.seekg(0, this->ifs_.beg);
+            this->ifs_.read(reinterpret_cast<char*>(&buf), sizeof(buf));
+            std::vector<byte> buffer(buf, buf + ph.size);
+            return this->rlecompressor_.Deflate(buffer);
         }
     }
 }

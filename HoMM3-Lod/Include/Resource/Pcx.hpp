@@ -1,5 +1,6 @@
 #pragma once
 #include "Resource/AResource.hpp"
+#include "Compression/PackedRLEHelper.hpp"
 #include "Types.hpp"
 
 namespace HoMM3
@@ -22,9 +23,15 @@ namespace HoMM3
         class HOMM3_LOD_LIB Pcx : public AResource<PcxHeader, void*>
         {
         private:
+            /// The RLE compressor used to extract bitmaps from the PCX
+            Compression::PackedRLEHelper rlecompressor_;
+            
             /// <summary>Method used to dump the content of the Pcx object</summary>
             /// <param name="os">The output stream where to write the dump</param>
             virtual void Dump_(std::ostream&) const override;
+            
+            /// <summary>Method used to load the entries headers of the PCX file</summary>
+            virtual void LoadHeader_() override;
             
             /// <summary>Method used to load the entries headers of the PCX file</summary>
             virtual void LoadEntriesHeaders_() override;

@@ -69,22 +69,37 @@ void TEST_Def(std::string const& file, bool woupt)
     std::cout << std::endl;
 }
 
-void TEST_Pcx(std::string const& file)
+void TEST_Pcx(std::string const& file, bool woupt)
 {
     HoMM3::Resource::Pcx frame_content(file);
     frame_content.Load();
     
     std::cout << "---PCX FILE---" << std::endl << frame_content << std::endl;
-    frame_content.ReadFrame(frame_content.GetHeader());
+    
+    std::vector<byte> entry;
+    entry = frame_content.ReadFrame(frame_content.GetHeader());
+    if (woupt)
+    {
+        for (std::vector<byte>::const_iterator i = entry.begin(); i != entry.end(); ++i)
+        {
+            std::cout << (int) *i << "-";
+        }
+    }
+    else
+    {
+        std::cout << "\tSkipped because byte dump is not required" << std::endl;
+    }
 }
 
 void TEST_ZCompression(std::string const& str)
 {
+    HoMM3::Compression::ZHelper zcompressor;
+    
     std::cout << "---TO DEFLATE---" << std::endl << str << std::endl;
     std::vector<byte> to_deflate(str.begin(), str.end());
-    std::vector<byte> deflated = HoMM3::Compression::ZHelper::Deflate(to_deflate);
+    std::vector<byte> deflated = zcompressor.Deflate(to_deflate);
     std::cout << "---DEFLATED---" << std::endl << deflated.data() << std::endl;
-    std::vector<byte> inflated = HoMM3::Compression::ZHelper::Inflate(deflated);
+    std::vector<byte> inflated = zcompressor.Inflate(deflated);
     std::cout << "---INFLATED---"  << std::endl;
     for (std::vector<byte>::const_iterator i = inflated.begin(); i != inflated.end(); ++i)
     {
@@ -104,7 +119,7 @@ int main(int argc, char **argv)
     
     TEST_Lod("txt_content.lod", std::string("true").compare(argv[1]) == 0);
     TEST_Def("sprite.def", std::string("true").compare(argv[1]) == 0);
-    TEST_Pcx("ab01_01.pcx");
+    TEST_Pcx("ab01_01.pcx", std::string("true").compare(argv[1]) == 0);
     TEST_ZCompression("This is a deflated string");
     return (EXIT_SUCCESS);
 }

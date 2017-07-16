@@ -37,7 +37,7 @@ namespace HoMM3
             }
         
             /// <summary>Method used to load the header of the Resource file</summary>
-            void LoadHeader_()
+            virtual void LoadHeader_()
             {
                 this->ifs_.read(reinterpret_cast<char*>(&this->header_), sizeof(this->header_));
             }

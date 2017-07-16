@@ -57,7 +57,7 @@ namespace HoMM3
             
             this->ifs_.seekg(eh.offset, this->ifs_.beg);
             this->ifs_.read(reinterpret_cast<char*>(&entry[0]), entry.size());
-            return (is_compressed ? HoMM3::Compression::ZHelper::Inflate(entry) : entry);
+            return (is_compressed ? this->zcompressor_.Inflate(entry) : entry);
         }
     }
 }

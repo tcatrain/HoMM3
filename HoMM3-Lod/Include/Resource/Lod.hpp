@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "Resource/AResource.hpp"
+#include "Compression/ZHelper.hpp"
 #include "Types.hpp"
 
 namespace HoMM3
@@ -66,6 +67,9 @@ namespace HoMM3
         class HOMM3_LOD_LIB Lod : public AResource<LodHeader, LodEntryHeader>
         {
     	private:
+            /// The Z compressor used to extract files from the LOD
+            Compression::ZHelper zcompressor_;
+            
     		/// <summary>Method used to dump the content of the Def object</summary>
     		/// <param name="os">The output stream where to write the dump</param>
             virtual void Dump_(std::ostream&) const override;

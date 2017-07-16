@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Compression/ACompressionHelper.hpp"
 #include "Types.hpp"
 
 namespace HoMM3
@@ -7,7 +8,7 @@ namespace HoMM3
     namespace Compression
     {
         /// <summary>Class ZHelper</summary>
-        class HOMM3_LOD_LIB ZHelper
+        class HOMM3_LOD_LIB ZHelper : ACompressionHelper
         {
         public:
             /// Size increase ratio of the buffer to inflate in
@@ -16,12 +17,12 @@ namespace HoMM3
             /// <summary>Method used to inflate a deflated byte vector</summary>
             /// <param name="in_bytes">The input deflated byte vector</param>
             /// <returns>The output inflated byte vector</returns>
-            static const std::vector<byte> Inflate(const std::vector<byte>&);
+            const std::vector<byte> Inflate(const std::vector<byte>&) override;
 
             /// <summary>Method used to deflate an inflated byte vector</summary>
             /// <param name="in_bytes">The input inflated byte vector</param>
             /// <returns>The output deflated byte vector</returns>
-            static const std::vector<byte> Deflate(const std::vector<byte>&);
+            const std::vector<byte> Deflate(const std::vector<byte>&) override;
         };
     }
 }
