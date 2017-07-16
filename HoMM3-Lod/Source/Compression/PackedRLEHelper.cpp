@@ -49,9 +49,8 @@ namespace HoMM3
             
             for (uint i = 0; i < this->unpked_size_ / this->chunk_size_; ++i)
             {
-                chunk_bytes = this->DoChunk_(in_bytes, *reinterpret_cast<const usint*>(&in_bytes[i * sizeof(usint) + 32]));
+                chunk_bytes = this->DoChunk_(in_bytes, *reinterpret_cast<const usint*>(&in_bytes[i * sizeof(usint)]));
                 out_bytes.insert(out_bytes.cend(), chunk_bytes.begin(), chunk_bytes.end());
-                
             }
             return out_bytes;
         }
@@ -59,35 +58,37 @@ namespace HoMM3
         const std::vector<byte> PackedRLEHelper::DoChunk_(const std::vector<byte>& in_bytes, usint lnoffset)
         {
             std::vector<byte> chunk_bytes;
-            uint rowlength = 0, offset = 0;
+            uint rowlength = 0, offset = 0, length;
             byte *buf;
             do
             {
-                buf = this->DoRLEUnpacking_(in_bytes, lnoffset, offset, *reinterpret_cast<const byte*>(&in_bytes[lnoffset + 32 + offset]));
-                chunk_bytes.insert(chunk_bytes.cend(), buf, buf + sizeof(buf));
-                rowlength += sizeof(buf);
+                length = this->DoRLEUnpacking_(in_bytes.data() + lnoffset, &offset, &buf);
+                chunk_bytes.insert(chunk_bytes.cend(), buf, buf + length);
+                rowlength += length;
                 ++offset;
             } while(rowlength < 32);
             return chunk_bytes;
         }
         
-        byte* PackedRLEHelper::DoRLEUnpacking_(const std::vector<byte>& in_bytes, uint lnoffset, uint& offset, byte current)
+        uint PackedRLEHelper::DoRLEUnpacking_(const byte* in_bytes, uint* offset, byte** buffer)
         {
+            byte current = *(in_bytes + *offset);
             uint length = (current & 0x1F) + 1;
-            byte* buffer = new byte[length];
+            *buffer = new byte[length];
             
-            if ((current & 0xE0) == 0xE0)
+            if ((current >> 5) == 7)
             {
                 for (uint j = 0; j < length; ++j)
                 {
-                    buffer[j] = *reinterpret_cast<const byte*>(&in_bytes[lnoffset + 32 + ++offset]);
+                    (*buffer)[j] = *(in_bytes + *offset + j);
                 }
+                *offset += length;
             }
             else
             {
-                std::fill_n(buffer, length, current & 0xE0);
+                std::fill_n(*buffer, length, current >> 5);
             }
-            return buffer;
+            return length;
         }
     }
 }

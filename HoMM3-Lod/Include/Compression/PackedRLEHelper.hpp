@@ -18,7 +18,7 @@ namespace HoMM3
             uint unpked_minsize_;
             
             const std::vector<byte> DoChunk_(const std::vector<byte>&, usint);
-            byte* DoRLEUnpacking_(const std::vector<byte>& in_bytes, uint lnoffset, uint& offset, byte current);
+            uint DoRLEUnpacking_(const byte*, uint*, byte**);
         public:
             /// <summary>Sets the size of a byte chunk</summary>
             /// <param name="cnk_size">The chunk size</param>

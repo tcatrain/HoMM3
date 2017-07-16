@@ -52,7 +52,7 @@ namespace HoMM3
         {
             byte buf[ph.size];
             
-            this->ifs_.seekg(0, this->ifs_.beg);
+            this->ifs_.seekg(sizeof(ph), this->ifs_.beg);
             this->ifs_.read(reinterpret_cast<char*>(&buf), sizeof(buf));
             std::vector<byte> buffer(buf, buf + ph.size);
             return this->rlecompressor_.Deflate(buffer);
