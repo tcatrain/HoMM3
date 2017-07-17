@@ -25,7 +25,7 @@ homm3_files(${PROJECT_NAME} ${HOMM3_LOD_INCLUDE}
     Resource/Lod.hpp
     Resource/Def.hpp
     Resource/Pcx.hpp
-    Compression/ACompresionHelper.hpp
+    Compression/ACompressionHelper.hpp
     Compression/ZHelper.hpp
     Compression/PackedRLEHelper.hpp
 )
