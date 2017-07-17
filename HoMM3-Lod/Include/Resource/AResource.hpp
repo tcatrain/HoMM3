@@ -1,15 +1,18 @@
 #pragma once
+
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
+
 #include "Types.hpp"
 
 namespace HoMM3
 {
     namespace Resource
     {
+        /// <summary>Abstract Template Class AResource<Header, EntryHeader></summary>
         template <typename Header, typename EntryHeader>
         class AResource
         {
@@ -53,6 +56,7 @@ namespace HoMM3
             virtual void Dump_(std::ostream&) const = 0;
             
         public:
+            /// <summary>Method used to load the header and entries headers from the provided resource</summary>
             void Load()
             {
                 this->LoadHeader_();

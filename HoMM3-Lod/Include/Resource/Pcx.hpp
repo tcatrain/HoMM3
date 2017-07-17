@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Resource/AResource.hpp"
 #include "Compression/PackedRLEHelper.hpp"
 #include "Types.hpp"
@@ -8,14 +9,36 @@ namespace HoMM3
     namespace Resource
     {
         #pragma pack(push, 1)
+        /// <summary>
+        /// Structure PcxHeader
+        /// 0x00 size of the PCX frame
+        /// 0x04 type of encoding of the PCX frame
+        ///     0x01 ??
+        ///     0x02 ??
+        ///     0x03 PackedRLE encoding
+        /// 0x08 full width of the sequence
+        /// 0x0C full height of the sequence
+        /// 0x10 width of the PCX frame
+        /// 0x14 height of the PCX frame
+        /// 0x18 x margin of the PCX frame
+        /// 0x1C y margin of the PCX frame
+        /// </summary>
         struct PcxHeader {
+            /// The size of the frame
             uint size;
+            /// The encoding type of the frame
             uint type;
+            /// The width of the full sequence
             uint flwidth;
+            /// The height of the full sequence
             uint flheight;
+            /// The width of the frame
             uint fmwidth;
+            /// The height of the frame
             uint fmheight;
+            /// The x margin of the frame
             uint xmargin;
+            /// The y margin of the frame
             uint ymargin;
         };
         #pragma pack(pop)

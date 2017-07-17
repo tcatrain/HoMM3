@@ -1,5 +1,7 @@
 #pragma once
+
 #include <vector>
+
 #include "Types.hpp"
 
 namespace HoMM3

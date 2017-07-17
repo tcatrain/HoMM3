@@ -1,5 +1,4 @@
 #include "Resource/Lod.hpp"
-#include "Compression/ZHelper.hpp"
 
 namespace HoMM3
 {

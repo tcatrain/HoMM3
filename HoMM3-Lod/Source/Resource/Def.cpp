@@ -1,6 +1,5 @@
 #include "Resource/Def.hpp"
 #include "Resource/Pcx.hpp"
-#include "Compression/ZHelper.hpp"
 
 namespace HoMM3
 {

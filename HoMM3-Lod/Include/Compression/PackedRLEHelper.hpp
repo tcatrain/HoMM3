@@ -1,5 +1,7 @@
 #pragma once
+
 #include <vector>
+
 #include "Compression/ACompressionHelper.hpp"
 #include "Types.hpp"
 

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <zlib.h>
+
 #include "Compression/ZHelper.hpp"
 
 namespace HoMM3

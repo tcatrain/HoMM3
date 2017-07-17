@@ -1,9 +1,11 @@
 #pragma once
+
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
+
 #include "Resource/AResource.hpp"
 #include "Compression/ZHelper.hpp"
 #include "Types.hpp"
@@ -24,7 +26,7 @@ namespace HoMM3
         {
             /// Size of an unknown portion of the LOD header
             static int const LODH_UKWN_SIZE = 80;
-        
+
             /// Key of the LOD file
             uint key;
             /// Type of the LOD file
@@ -35,7 +37,7 @@ namespace HoMM3
             byte ukwn[LODH_UKWN_SIZE];
         };
         #pragma pack(pop)
-        
+
         #pragma pack(push, 1)
         /// <summary>
         /// Structure LodEntryHeader
@@ -49,7 +51,7 @@ namespace HoMM3
         {
             /// Size of an entry name in a LOD file
             static int const LODEH_NAME_SIZE = 16;
-        
+
             /// Name if the entry
             unsigned char name[LODEH_NAME_SIZE];
             /// Offset of the entry into the LOD file

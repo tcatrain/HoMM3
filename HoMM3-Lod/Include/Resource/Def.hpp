@@ -1,11 +1,14 @@
 #pragma once
+
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
+
 #include "Resource/AResource.hpp"
 #include "Types.hpp"
+
 namespace HoMM3
 {
     namespace Resource
@@ -19,8 +22,11 @@ namespace HoMM3
         /// </summary>
         struct DefColorIndex
         {
+            /// The red value of the color
             byte r;
+            /// The green value of the color
             byte g;
+            /// The blue value of the color
             byte b;
         };
         #pragma pack(pop)

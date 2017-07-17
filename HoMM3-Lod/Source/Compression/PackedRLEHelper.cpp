@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+
 #include "Compression/PackedRLEHelper.hpp"
 
 namespace HoMM3
