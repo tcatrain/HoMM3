@@ -54,7 +54,7 @@ namespace HoMM3
                 chunk_offset = *reinterpret_cast<const usint*>(&in_bytes[i * sizeof(usint)]);
                 /// Then position the cursor to the byte sequence starting at $offset
                 chunk_bytes = this->UnpackChunk_(in_bytes.data() + chunk_offset);
-                out_bytes.insert(out_bytes.cend(), chunk_bytes.begin(), chunk_bytes.end());
+                out_bytes.insert(out_bytes.end(), chunk_bytes.begin(), chunk_bytes.end());
             }
             return out_bytes;
         }
@@ -72,7 +72,7 @@ namespace HoMM3
             {
                 length = this->UnpackNext_(chunk_addr);
                 /// Appends the buffer to the end of chunk bytes
-                chunk_bytes.insert(chunk_bytes.cend(), this->buffer_, this->buffer_ + length);
+                chunk_bytes.insert(chunk_bytes.end(), this->buffer_, this->buffer_ + length);
                 rowlength += length;
             } while(rowlength < this->unpked_minsize_);
             return chunk_bytes;
