@@ -30,7 +30,7 @@ namespace HoMM3
             }
             
             /// <summary>Destructor if the class HoMM3::Resource::AResource</summary>
-            ~AResource()
+            virtual ~AResource()
             {
                 this->entries_headers_.clear();
                 this->ifs_.close();

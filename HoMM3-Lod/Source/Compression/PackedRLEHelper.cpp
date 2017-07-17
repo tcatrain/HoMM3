@@ -74,7 +74,7 @@ namespace HoMM3
                 /// Appends the buffer to the end of chunk bytes
                 chunk_bytes.insert(chunk_bytes.cend(), this->buffer_, this->buffer_ + length);
                 rowlength += length;
-            } while(rowlength < 32);
+            } while(rowlength < this->unpked_minsize_);
             return chunk_bytes;
         }
         
@@ -86,13 +86,13 @@ namespace HoMM3
             /// Reads the next byte from the sequence to read
             byte current = *(chunk_addr + this->nb_read_);
             /// The length of the sequence is defined in the last 5 bits of the byte
-            uint length = (current & 0x1F) + 1;
+            uint length = (current & (uint) 0b11111) + 1;
             /// The key of the sequence is defined in the first 3 bits if the byte
             uint key = current >> 5;
             this->buffer_ = new byte[length];
             
             /// If the key is bin(111), the sequence must be read as is from the inpyt
-            if (key == 7)
+            if (key == 0b111)
             {
                 for (uint j = 0; j < length; ++j)
                 {

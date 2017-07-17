@@ -24,7 +24,7 @@ void TEST_Lod(std::string const& file, bool woupt)
             {
                 for (std::vector<byte>::const_iterator k = entry.begin(); k != entry.end(); ++k)
                 {
-                    std::cout << *k;
+                    //std::cout << *k;
                 }
             }
             else
@@ -84,6 +84,7 @@ void TEST_Pcx(std::string const& file, bool woupt)
         {
             std::cout << (int) *i << "-";
         }
+        std::cout << std::endl;
     }
     else
     {
