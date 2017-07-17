@@ -1,0 +1,38 @@
+#include "Image/Bitmap.hpp"
+
+namespace HoMM3
+{
+    namespace Image
+    {
+        Bitmap::Bitmap()
+        {
+
+        }
+
+        const BitmapHeader& Bitmap::GetHeader() const
+        {
+            return this->header_;
+        }
+
+        const BitmapInfos& Bitmap::GetInfos() const
+        {
+            return this->infos_;
+        }
+
+        void Bitmap::SetPalette(BitmapColor* palette)
+        {
+            this->palette_ = palette;
+        }
+
+        void Bitmap::SetPixels(const std::vector<byte>& pixels)
+        {
+            this->pixels_ = pixels;
+        }
+
+        const std::vector<byte> Bitmap::Create() const
+        {
+            std::vector<byte> bitmap_content;
+            return bitmap_content;
+        }
+    }
+}
