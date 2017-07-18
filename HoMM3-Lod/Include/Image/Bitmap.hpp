@@ -112,7 +112,8 @@ namespace HoMM3
             std::vector<byte> pixels_;
         public:
             Bitmap();
-            BitmapInfos& GetInfos();
+            const BitmapHeader& GetHeader() const;
+            const BitmapInfos& GetInfos() const;
             void SetPalette(BitmapColor*);
             void SetPixels(const std::vector<byte>&);
             const std::vector<byte> Create() const;
