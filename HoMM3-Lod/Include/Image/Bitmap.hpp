@@ -54,7 +54,7 @@ namespace HoMM3
         struct BitmapInfos
         {
             /// The size of the pixel array
-            uint datasize;
+            uint infossize;
             /// The width of the bitmap
             uint width;
             /// The height of the bitmap
@@ -81,19 +81,19 @@ namespace HoMM3
         #pragma pack(push, 1)
         /// <summary>
         /// Structure BitmapColor
-        /// 0x00 red value
+        /// 0x00 blue value
         /// 0x01 green value
-        /// 0x02 blue value
+        /// 0x02 red value
         /// 0x03 unused alpha value
         /// </summary>
         struct BitmapColor
         {
-            /// The red value of the color
-            byte r;
-            /// The green value of the color
-            byte g;
             /// The blue value of the color
             byte b;
+            /// The green value of the color
+            byte g;
+            /// The red value of the color
+            byte r;
             /// The unused alpha value of the color
             byte a;
         };
@@ -110,13 +110,15 @@ namespace HoMM3
             BitmapColor* palette_;
             /// Pixels of the bitmap
             std::vector<byte> pixels_;
+            
+            /// Prepare the header according to bitmap setup
+            void PrepareHeader_();
         public:
             Bitmap();
-            const BitmapHeader& GetHeader() const;
-            const BitmapInfos& GetInfos() const;
+            BitmapInfos& GetInfos();
             void SetPalette(BitmapColor*);
             void SetPixels(const std::vector<byte>&);
-            const std::vector<byte> Create() const;
+            const std::vector<byte> Create();
         };
     }
 }

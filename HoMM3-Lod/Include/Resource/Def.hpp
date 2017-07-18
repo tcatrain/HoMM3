@@ -20,7 +20,7 @@ namespace HoMM3
         /// 0x01 green index
         /// 0x02 blue index
         /// </summary>
-        struct DefColorIndex
+        struct HOMM3_LOD_LIB DefColorIndex
         {
             /// The red value of the color
             byte r;
