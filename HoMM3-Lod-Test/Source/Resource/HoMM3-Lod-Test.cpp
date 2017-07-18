@@ -1,5 +1,6 @@
 #include <string>
 #include <sstream>
+#include "Image/Bitmap.hpp"
 #include "Resource/Lod.hpp"
 #include "Resource/Def.hpp"
 #include "Resource/Pcx.hpp"
@@ -76,15 +77,9 @@ void TEST_Pcx(std::string const& file, bool woupt)
     
     std::cout << "---PCX FILE---" << std::endl << frame_content << std::endl;
     
-    std::vector<byte> entry;
-    entry = frame_content.ReadFrame(frame_content.GetHeader());
+    HoMM3::Image::Bitmap bitmap = frame_content.ReadFrame(frame_content.GetHeader());
     if (woupt)
     {
-        for (std::vector<byte>::const_iterator i = entry.begin(); i != entry.end(); ++i)
-        {
-            std::cout << (int) *i << "-";
-        }
-        std::cout << std::endl;
     }
     else
     {

@@ -9,12 +9,7 @@ namespace HoMM3
 
         }
 
-        const BitmapHeader& Bitmap::GetHeader() const
-        {
-            return this->header_;
-        }
-
-        const BitmapInfos& Bitmap::GetInfos() const
+        BitmapInfos& Bitmap::GetInfos()
         {
             return this->infos_;
         }

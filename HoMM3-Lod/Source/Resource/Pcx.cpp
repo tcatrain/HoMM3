@@ -35,6 +35,14 @@ namespace HoMM3
             /// Nothing to do here
         }
         
+        Image::Bitmap& Pcx::PrepareBitmap_(const PcxHeader& ph, Image::Bitmap& bitmap) const
+        {
+            bitmap.GetInfos().width = ph.fmwidth;
+            bitmap.GetInfos().height = ph.fmheight;
+            //bitmap.GetInfos().palettesize
+            return bitmap;
+        }
+        
         /// <summary>
         /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream
         /// and parses the file to locate content.
@@ -48,16 +56,21 @@ namespace HoMM3
         /// <summary>Method used to read an entry from the PCX file</summary>
         /// <param name="eh">The frame header structure to read</param>
         /// <returns>The byte vector containing the bitmap frame</returns>
-        const std::vector<byte> Pcx::ReadFrame(const PcxHeader& ph)
+        const Image::Bitmap Pcx::ReadFrame(const PcxHeader& ph)
         {
             byte buf[ph.size];
+            std::vector<byte> frame_content;
+            Image::Bitmap frame_bitmap;
+            
+            this->PrepareBitmap_(ph, frame_bitmap);
             
             /// Don't forget to start after the header of the PCX file
             this->ifs_.seekg(sizeof(ph), this->ifs_.beg);
             this->ifs_.read(reinterpret_cast<char*>(&buf), sizeof(buf));
+            
             /// Fill in the vector to be processed by the compressor
-            std::vector<byte> buffer(buf, buf + ph.size);
-            return this->rlecompressor_.Deflate(buffer);
+            frame_content = this->rlecompressor_.Deflate(std::vector<byte>(buf, buf + ph.size));
+            return frame_bitmap;
         }
     }
 }

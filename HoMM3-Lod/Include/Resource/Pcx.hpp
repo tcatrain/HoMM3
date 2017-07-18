@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Image/Bitmap.hpp"
 #include "Resource/AResource.hpp"
 #include "Compression/PackedRLEHelper.hpp"
 #include "Types.hpp"
@@ -59,6 +60,8 @@ namespace HoMM3
             /// <summary>Method used to load the entries headers of the PCX file</summary>
             virtual void LoadEntriesHeaders_() override;
             
+            Image::Bitmap& PrepareBitmap_(const PcxHeader&, Image::Bitmap&) const;
+            
         public:
             /// <summary>
             /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream
@@ -70,7 +73,7 @@ namespace HoMM3
             /// <summary>Method used to read an entry from the PCX file</summary>
             /// <param name="eh">The frame header structure to read</param>
             /// <returns>The byte vector containing the bitmap frame</returns>
-            const std::vector<byte> ReadFrame(const PcxHeader&);
+            const Image::Bitmap ReadFrame(const PcxHeader&);
         };
         
     }
