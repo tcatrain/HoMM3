@@ -23,7 +23,7 @@ namespace HoMM3
         /// <summary>Method used to load the header of the PCX file and set the compressor context</summary>
         void Pcx::LoadHeader_()
         {
-            this->AResource::LoadHeader_();
+            AResource::LoadHeader_();
             this->rlecompressor_.SetChunkSize(32);
             this->rlecompressor_.SetUnpackedSize(this->header_.fmheight * this->header_.fmwidth);
             this->rlecompressor_.SetUnpackedChunkSize(32);
@@ -51,13 +51,24 @@ namespace HoMM3
         const std::vector<byte> Pcx::ReadFrame(const PcxHeader& ph)
         {
             byte buf[ph.size];
-            
+
             /// Don't forget to start after the header of the PCX file
             this->ifs_.seekg(sizeof(ph), this->ifs_.beg);
             this->ifs_.read(reinterpret_cast<char*>(&buf), sizeof(buf));
             /// Fill in the vector to be processed by the compressor
             std::vector<byte> buffer(buf, buf + ph.size);
-            return this->rlecompressor_.Deflate(buffer);
+            buffer = this->rlecompressor_.Deflate(buffer);
+
+            /// Apply the margin bytes
+            byte xpad[this->header_.xmargin], ypad[this->header_.ymargin * (this->header_.fmwidth + this->header_.xmargin)];
+            std::fill_n(xpad, this->header_.xmargin, 0);
+            std::fill_n(ypad, this->header_.ymargin * (this->header_.fmwidth + this->header_.xmargin), 0);
+
+            for (uint i = 0; i < this->header_.size; ++i) {
+                buffer.insert(buffer.begin() + i * this->header_.fmwidth, xpad, xpad + this->header_.xmargin);
+            }
+            buffer.insert(buffer.begin(), ypad, ypad + this->header_.ymargin * (this->header_.fmwidth + this->header_.xmargin));
+            return buffer;
         }
     }
 }

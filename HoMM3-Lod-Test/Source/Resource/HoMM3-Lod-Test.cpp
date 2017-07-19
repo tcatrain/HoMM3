@@ -121,8 +121,8 @@ void TEST_Bitmap(HoMM3::Resource::Pcx* pcx, const HoMM3::Resource::DefColorIndex
     
     HoMM3::Image::Bitmap bitmap;
     bitmap.GetInfos().infossize = 40;
-    bitmap.GetInfos().width = pcx->GetHeader().fmwidth;
-    bitmap.GetInfos().height = pcx->GetHeader().fmheight;
+    bitmap.GetInfos().width = pcx->GetHeader().fmwidth + pcx->GetHeader().xmargin;
+    bitmap.GetInfos().height = pcx->GetHeader().fmheight + pcx->GetHeader().ymargin;;
     bitmap.GetInfos().planes = 1;
     bitmap.GetInfos().bpp = 8;
     bitmap.GetInfos().rlemode = 0;
@@ -154,10 +154,11 @@ int main(int argc, char **argv)
 
     if (argc != 2)
     {
+        std::cerr << "Missing the dump parameter" << std::endl;
         return (EXIT_FAILURE);
     }
     
-    HoMM3::Resource::Lod* lod = TEST_Lod("txt_content.lod", std::string("true").compare(argv[1]) == 0);
+    TEST_Lod("txt_content.lod", std::string("true").compare(argv[1]) == 0);
     HoMM3::Resource::Def* def = TEST_Def("sprite.def", std::string("true").compare(argv[1]) == 0);
     HoMM3::Resource::Pcx* pcx = TEST_Pcx("ab01_01.pcx", std::string("true").compare(argv[1]) == 0);
     TEST_Bitmap(pcx, def->GetHeader().palette);
