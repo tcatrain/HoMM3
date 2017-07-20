@@ -19,12 +19,12 @@ namespace HoMM3
             /// <summary>Method used to inflate a deflated byte vector</summary>
             /// <param name="in_bytes">The input deflated byte vector</param>
             /// <returns>The output inflated byte vector</returns>
-            const std::vector<byte> Inflate(const std::vector<byte>&) override;
+            std::vector<byte>& Inflate(const std::vector<byte>&) override;
 
             /// <summary>Method used to deflate an inflated byte vector</summary>
             /// <param name="in_bytes">The input inflated byte vector</param>
             /// <returns>The output deflated byte vector</returns>
-            const std::vector<byte> Deflate(const std::vector<byte>&) override;
+            std::vector<byte>& Deflate(const std::vector<byte>&) override;
         };
     }
 }

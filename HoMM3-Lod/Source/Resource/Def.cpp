@@ -100,9 +100,9 @@ namespace HoMM3
         /// <summary>Method used to read a sequence frames from the DEF file</summary>
         /// <param name="seqeh">The sequence header structure to read</param>
         /// <returns>The vector containing the list of frame</returns>
-        const std::vector<std::vector<byte>> Def::ReadSequence(const DefSequenceHeader& seqh)
+        const std::vector<std::vector<byte>>& Def::ReadSequence(const DefSequenceHeader& seqh)
         {
-            std::vector<std::vector<byte>> frames;
+            std::vector<std::vector<byte>>* frames = new std::vector<std::vector<byte>>();
             
             for (uint i = 0, n = seqh.nb, size; i < n; ++i)
             {
@@ -115,9 +115,9 @@ namespace HoMM3
                 /// The whole pcx contains the frame + the header
                 std::vector<byte> frame(size + sizeof(PcxHeader));
                 this->ifs_.read(reinterpret_cast<char*>(&frame[0]), frame.size());
-                frames.push_back(frame);
+                frames->push_back(frame);
             }
-            return frames;
+            return *frames;
         }
     }
 }

@@ -35,6 +35,31 @@ namespace HoMM3
             /// Nothing to do here
         }
         
+        /// <summary>Method used to mould the PCX entry file to full dimensions</summary>
+        /// <param name="buffer">The buffer to work on containing the extracted PCX entry file</param>
+        /// <returns>The provided vector updated</returns>
+        std::vector<byte>& Pcx::Mould_(std::vector<byte>& buffer)
+        {
+            /// Apply the margin bytes
+            byte lxpad[this->header_.xmargin];
+            byte rxpad[this->header_.flwidth - this->header_.xmargin - this->header_.fmwidth];
+            byte typad[this->header_.ymargin * this->header_.flwidth];
+            byte bypad[(this->header_.flheight - this->header_.ymargin - this->header_.fmheight) * this->header_.flwidth];
+            
+            std::fill_n(lxpad, sizeof(lxpad), 0);
+            std::fill_n(rxpad, sizeof(rxpad), 0);
+            std::fill_n(typad, sizeof(typad), 0);
+            std::fill_n(bypad, sizeof(bypad), 0);
+
+            for (uint i = 0; i < this->header_.fmheight; ++i) {
+                buffer.insert(buffer.begin() + i * this->header_.flwidth, lxpad, lxpad + sizeof(lxpad));
+                buffer.insert(buffer.begin() + (i + 1) * this->header_.flwidth - sizeof(rxpad), rxpad, rxpad + sizeof(rxpad));
+            }
+            buffer.insert(buffer.begin(), typad, typad + sizeof(typad));
+            buffer.insert(buffer.end(), bypad, bypad + sizeof(bypad));
+            return buffer;
+        }
+        
         /// <summary>
         /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream
         /// and parses the file to locate content.
@@ -46,29 +71,17 @@ namespace HoMM3
         }
         
         /// <summary>Method used to read an entry from the PCX file</summary>
-        /// <param name="eh">The frame header structure to read</param>
         /// <returns>The byte vector containing the bitmap frame</returns>
-        const std::vector<byte> Pcx::ReadFrame(const PcxHeader& ph)
+        std::vector<byte>& Pcx::ReadFrame()
         {
-            byte buf[ph.size];
+            byte buf[this->header_.size];
 
             /// Don't forget to start after the header of the PCX file
-            this->ifs_.seekg(sizeof(ph), this->ifs_.beg);
+            this->ifs_.seekg(sizeof(this->header_), this->ifs_.beg);
             this->ifs_.read(reinterpret_cast<char*>(&buf), sizeof(buf));
             /// Fill in the vector to be processed by the compressor
-            std::vector<byte> buffer(buf, buf + ph.size);
-            buffer = this->rlecompressor_.Deflate(buffer);
-
-            /// Apply the margin bytes
-            byte xpad[this->header_.xmargin], ypad[this->header_.ymargin * (this->header_.fmwidth + this->header_.xmargin)];
-            std::fill_n(xpad, this->header_.xmargin, 0);
-            std::fill_n(ypad, this->header_.ymargin * (this->header_.fmwidth + this->header_.xmargin), 0);
-
-            for (uint i = 0; i < this->header_.size; ++i) {
-                buffer.insert(buffer.begin() + i * this->header_.fmwidth, xpad, xpad + this->header_.xmargin);
-            }
-            buffer.insert(buffer.begin(), ypad, ypad + this->header_.ymargin * (this->header_.fmwidth + this->header_.xmargin));
-            return buffer;
+            std::vector<byte>* buffer = new std::vector<byte>(buf, buf + this->header_.size);
+            return this->Mould_(this->rlecompressor_.Deflate(*buffer));
         }
     }
 }

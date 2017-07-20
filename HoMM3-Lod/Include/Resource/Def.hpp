@@ -145,7 +145,7 @@ namespace HoMM3
             /// <summary>Method used to read a sequence frames from the DEF file</summary>
             /// <param name="seqeh">The sequence header structure to read</param>
             /// <returns>The vector containing the list of frame</returns>
-            const std::vector<std::vector<byte>> ReadSequence(const DefSequenceHeader&);
+            const std::vector<std::vector<byte>>& ReadSequence(const DefSequenceHeader&);
         };
     }
 }

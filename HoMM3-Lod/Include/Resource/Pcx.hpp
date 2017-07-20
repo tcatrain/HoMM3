@@ -59,6 +59,10 @@ namespace HoMM3
             /// <summary>Method used to load the entries headers of the PCX file</summary>
             virtual void LoadEntriesHeaders_() override;
             
+            /// <summary>Method used to mould the PCX entry file to full dimensions</summary>
+            /// <param name="buffer">The buffer to work on containing the extracted PCX entry file</param>
+            std::vector<byte>& Mould_(std::vector<byte>&);
+            
         public:
             /// <summary>
             /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream
@@ -68,9 +72,8 @@ namespace HoMM3
             Pcx(const std::string&);
             
             /// <summary>Method used to read an entry from the PCX file</summary>
-            /// <param name="eh">The frame header structure to read</param>
             /// <returns>The byte vector containing the bitmap frame</returns>
-            const std::vector<byte> ReadFrame(const PcxHeader&);
+            std::vector<byte>& ReadFrame();
         };
         
     }

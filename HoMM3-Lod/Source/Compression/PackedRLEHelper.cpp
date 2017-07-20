@@ -31,22 +31,22 @@ namespace HoMM3
         /// <summary>Method used to inflate a deflated byte vector</summary>
         /// <param name="in_bytes">The input deflated byte vector</param>
         /// <returns>The output inflated byte vector</returns>
-        const std::vector<byte> PackedRLEHelper::Inflate(const std::vector<byte> &in_bytes)
+        std::vector<byte>& PackedRLEHelper::Inflate(const std::vector<byte> &in_bytes)
         {
-            std::vector<byte> out_bytes;
+            std::vector<byte>* out_bytes = new std::vector<byte>();
             for (uint i = 0; i < in_bytes.size(); ++i)
             {
-                out_bytes.push_back(in_bytes[i]);
+                out_bytes->push_back(in_bytes[i]);
             }
-            return out_bytes;
+            return *out_bytes;
         }
         
         /// <summary>Method used to deflate an inflated byte vector</summary>
         /// <param name="in_bytes">The input inflated byte vector</param>
         /// <returns>The output deflated byte vector</returns>
-        const std::vector<byte> PackedRLEHelper::Deflate(const std::vector<byte> &in_bytes)
+        std::vector<byte>& PackedRLEHelper::Deflate(const std::vector<byte> &in_bytes)
         {
-            std::vector<byte> out_bytes, chunk_bytes;
+            std::vector<byte>* out_bytes = new std::vector<byte>();
             usint chunk_offset;
             
             for (uint i = 0; i < this->unpked_size_ / this->chunk_size_; ++i)
@@ -54,18 +54,16 @@ namespace HoMM3
                 /// Reads the next 2 bytes to get the offset of the next chunk within the sequence
                 chunk_offset = *reinterpret_cast<const usint*>(&in_bytes[i * sizeof(usint)]);
                 /// Then position the cursor to the byte sequence starting at $offset
-                chunk_bytes = this->UnpackChunk_(in_bytes.data() + chunk_offset);
-                out_bytes.insert(out_bytes.end(), chunk_bytes.begin(), chunk_bytes.end());
+                this->UnpackChunk_(in_bytes.data() + chunk_offset, *out_bytes);
             }
-            return out_bytes;
+            return *out_bytes;
         }
         
         /// <summary>Method used to unpack the chunk starting at a provided address</summary>
         /// <param name="chunk_addr">The address of the chunk to process</param>
         /// <returns>The vector containing chunk's bytes</returns>
-        const std::vector<byte> PackedRLEHelper::UnpackChunk_(const byte* chunk_addr)
+        void PackedRLEHelper::UnpackChunk_(const byte* chunk_addr, std::vector<byte>& out_bytes)
         {
-            std::vector<byte> chunk_bytes;
             uint rowlength = 0, length;
             
             this->nb_read_ = 0;
@@ -73,10 +71,9 @@ namespace HoMM3
             {
                 length = this->UnpackNext_(chunk_addr);
                 /// Appends the buffer to the end of chunk bytes
-                chunk_bytes.insert(chunk_bytes.end(), this->buffer_, this->buffer_ + length);
+                out_bytes.insert(out_bytes.end(), this->buffer_, this->buffer_ + length);
                 rowlength += length;
             } while(rowlength < this->unpked_minsize_);
-            return chunk_bytes;
         }
         
         /// <summary>Method used to unpack the next sequence for the current chunk</summary>

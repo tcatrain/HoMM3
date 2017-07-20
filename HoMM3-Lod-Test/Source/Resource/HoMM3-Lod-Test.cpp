@@ -46,6 +46,7 @@ HoMM3::Resource::Lod* TEST_Lod(std::string const& file, bool woupt)
 
 HoMM3::Resource::Def* TEST_Def(std::string const& file, bool woupt)
 {
+    std::cout << "inhere" << std::endl;
     HoMM3::Resource::Def* sprite_content = new HoMM3::Resource::Def(file);
     sprite_content->Load();
     
@@ -81,7 +82,7 @@ HoMM3::Resource::Pcx* TEST_Pcx(std::string const& file, bool woupt)
     std::cout << "---PCX FILE---" << std::endl << *frame_content << std::endl;
     
     std::vector<byte> entry;
-    entry = frame_content->ReadFrame(frame_content->GetHeader());
+    entry = frame_content->ReadFrame();
     if (woupt)
     {
         for (std::vector<byte>::const_iterator i = entry.begin(); i != entry.end(); ++i)
@@ -114,15 +115,16 @@ void TEST_ZCompression(std::string const& str)
     std::cout << std::endl;
 }
 
-void TEST_Bitmap(HoMM3::Resource::Pcx* pcx, const HoMM3::Resource::DefColorIndex* palette)
+void TEST_Bitmap(HoMM3::Resource::Pcx* pcx, const HoMM3::Resource::Def* def)
 {
-    const std::vector<byte> frame_datas = pcx->ReadFrame(pcx->GetHeader());
+    const std::vector<byte> frame_datas = pcx->ReadFrame();
+    const HoMM3::Resource::DefColorIndex* palette = def->GetHeader().palette;
     HoMM3::Image::BitmapColor bitmap_palette[256];
     
     HoMM3::Image::Bitmap bitmap;
     bitmap.GetInfos().infossize = 40;
-    bitmap.GetInfos().width = pcx->GetHeader().fmwidth + pcx->GetHeader().xmargin;
-    bitmap.GetInfos().height = pcx->GetHeader().fmheight + pcx->GetHeader().ymargin;;
+    bitmap.GetInfos().width = pcx->GetHeader().flwidth;
+    bitmap.GetInfos().height = pcx->GetHeader().flheight;
     bitmap.GetInfos().planes = 1;
     bitmap.GetInfos().bpp = 8;
     bitmap.GetInfos().rlemode = 0;
@@ -161,7 +163,7 @@ int main(int argc, char **argv)
     TEST_Lod("txt_content.lod", std::string("true").compare(argv[1]) == 0);
     HoMM3::Resource::Def* def = TEST_Def("sprite.def", std::string("true").compare(argv[1]) == 0);
     HoMM3::Resource::Pcx* pcx = TEST_Pcx("ab01_01.pcx", std::string("true").compare(argv[1]) == 0);
-    TEST_Bitmap(pcx, def->GetHeader().palette);
+    TEST_Bitmap(pcx, def);
     TEST_ZCompression("This is a deflated string");
     return (EXIT_SUCCESS);
 }

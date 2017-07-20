@@ -26,7 +26,7 @@ namespace HoMM3
             /// <summary>Method used to unpack the chunk starting at a provided address</summary>
             /// <param name="chunk_addr">The address of the chunk to process</param>
             /// <returns>The vector containing chunk's bytes</returns>
-            const std::vector<byte> UnpackChunk_(const byte*);
+            void UnpackChunk_(const byte*, std::vector<byte>&);
             
             /// <summary>Method used to unpack the next sequence for the current chunk</summary>
             /// <param name="chunk_addr">The address of the chunk to process</param>
@@ -49,12 +49,12 @@ namespace HoMM3
             /// <summary>Method used to inflate a deflated byte vector</summary>
             /// <param name="in_bytes">The input deflated byte vector</param>
             /// <returns>The output inflated byte vector</returns>
-            const std::vector<byte> Inflate(const std::vector<byte>&) override;
+            std::vector<byte>& Inflate(const std::vector<byte>&) override;
             
             /// <summary>Method used to deflate an inflated byte vector</summary>
             /// <param name="in_bytes">The input inflated byte vector</param>
             /// <returns>The output deflated byte vector</returns>
-            const std::vector<byte> Deflate(const std::vector<byte>&) override;
+            std::vector<byte>& Deflate(const std::vector<byte>&) override;
         };
     }
 }
