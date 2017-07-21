@@ -9,7 +9,11 @@ set(HOMM3_LOD_TEST_INCLUDE "${HOMM3_LOD_TEST_ROOT_DIR}/Include")
 # --------------------------
 # Sources declaration : cpp
 homm3_files(${PROJECT_NAME} ${HOMM3_LOD_TEST_SOURCE}
-    Resource/HoMM3-Lod-Test.cpp
+    HoMM3-Lod-Test.cpp
+    Compression/ZHelperUnitTest.cpp
+    Resource/LodUnitTest.cpp
+    Resource/DefUnitTest.cpp
+    Resource/PcxUnitTest.cpp
 )
 # --------------------------
 
@@ -40,11 +44,18 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${HOMM3_LOD_TEST_ROOT_DIR}/Include
         ${HoMM3_Lod_SOURCE_DIR}/Include
+		${GOOGLETEST_INCLUDE_DIR}
+
 )
 
 # Link required libraries to the project
 target_link_libraries(${PROJECT_NAME}
-    PUBLIC HoMM3_Lod
+    PUBLIC
+		HoMM3_Lod
+		gtest
+		gtest_main
+		gmock
+		gmock_main
 )
 
 # copy of dll from HoMM3_Lod

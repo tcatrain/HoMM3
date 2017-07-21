@@ -10,6 +10,7 @@ namespace HoMM3
         /// <returns>The outstream given in input</returns>
         void Pcx::Dump_(std::ostream& os) const
         {
+            os << "---PCX FILE---" << std::endl;
             os << "pcx.header_.size=" << this->header_.size << std::endl;
             os << "pcx.header_.type=" << this->header_.type << std::endl;
             os << "pcx.header_.flwidth=" << this->header_.flwidth << std::endl;
@@ -18,6 +19,7 @@ namespace HoMM3
             os << "pcx.header_.fmheight=" << this->header_.fmheight << std::endl;
             os << "pcx.header_.xmargin=" << this->header_.xmargin << std::endl;
             os << "pcx.header_.ymargin=" << this->header_.ymargin << std::endl;
+            os << "---PCX FILE END---" << std::endl << std::endl;
         }
         
         /// <summary>Method used to load the header of the PCX file and set the compressor context</summary>

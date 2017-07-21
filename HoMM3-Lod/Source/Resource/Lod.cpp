@@ -12,6 +12,7 @@ namespace HoMM3
         {
             uint n = this->header_.nb;
 
+            os << "---LOD FILE---" << std::endl;
             os << "lod.header_.key=" << this->header_.key << std::endl;
             os << "lod.header_.type=" << this->header_.type << std::endl;
             os << "lod.header_.nb=" << this->header_.nb << std::endl;
@@ -23,6 +24,7 @@ namespace HoMM3
                 os << "lod.entries_headers_.[" << i << "].type=" << this->entries_headers_[i]->type << std::endl;
                 os << "lod.entries_headers_.[" << i << "].zsize=" << this->entries_headers_[i]->zsize << std::endl;
             }
+            os << "---LOD FILE END---" << std::endl << std::endl;
         }
         
         /// <summary>Method used to load the entries headers of the LOD file</summary>

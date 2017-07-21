@@ -11,6 +11,7 @@ namespace HoMM3
         /// <returns>The outstream given in input</returns>
         void Def::Dump_(std::ostream& os) const
         {
+            os << "---DEF FILE---" << std::endl;
             os << "def.header_.type=" << this->header_.type << std::endl;
             os << "def.header_.width=" << this->header_.width << std::endl;
             os << "def.header_.height=" << this->header_.height << std::endl;
@@ -31,6 +32,7 @@ namespace HoMM3
                     os << "def.entries_headers_[" << i << "].sequence_header[" << j << "].offset=" << this->entries_headers_[i]->seq_frames[j]->offset << std::endl;
                 }
             }
+            os << "---DEF FILE END---" << std::endl << std::endl;
         }
         
         /// <summary>Method used to load the entries headers of the DEF file</summary>
