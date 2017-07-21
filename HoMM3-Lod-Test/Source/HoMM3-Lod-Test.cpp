@@ -1,11 +1,6 @@
-#include <string>
 #include <sstream>
 
 #include "gmock/gmock.h"
-#include "Image/Bitmap.hpp"
-#include "Resource/Lod.hpp"
-#include "Resource/Def.hpp"
-#include "Resource/Pcx.hpp"
 
 
 //void TEST_ZCompression(std::string const& str)
@@ -66,22 +61,4 @@ int main(int argc, char **argv)
 
     ::testing::InitGoogleMock(&argc, argv);
     return RUN_ALL_TESTS();
-
-//    if (argc != 2)
-//    {
-//        std::cerr << "Missing the dump parameter" << std::endl;
-//        return (EXIT_FAILURE);
-//    }
-//
-//    HoMM3::Resource::Lod* lod = TEST_Lod("txt_content.lod");
-//    HoMM3::Resource::Def* def = TEST_Def("sprite.def");
-//    HoMM3::Resource::Pcx* pcx = TEST_Pcx("ab01_01.pcx");
-//    if (std::string("true").compare(argv[1]) == 0)
-//    {
-//        std::cout << *lod << *def << *pcx << std::endl;
-//    }
-//    TEST_Bitmap(pcx, def);
-//    TEST_ZCompression("This is a deflated string");
-//    return (EXIT_SUCCESS);
-
 }
