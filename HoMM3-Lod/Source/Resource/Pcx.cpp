@@ -83,7 +83,7 @@ namespace HoMM3
             this->ifs_.read(reinterpret_cast<char*>(&buf), sizeof(buf));
             /// Fill in the vector to be processed by the compressor
             std::vector<byte>* buffer = new std::vector<byte>(buf, buf + this->header_.size);
-            return this->Mould_(this->rlecompressor_.Deflate(*buffer));
+            return this->Mould_(this->rlecompressor_.Inflate(*buffer));
         }
     }
 }

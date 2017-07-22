@@ -33,6 +33,8 @@ namespace HoMM3
             /// <returns>The length of the unpacked segment</returns>
             uint UnpackNext_(const byte*);
             
+            uint PackNext_(const byte*);
+            
         public:
             /// <summary>Sets the size of a byte chunk</summary>
             /// <param name="cnk_size">The chunk size</param>

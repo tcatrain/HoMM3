@@ -15,7 +15,7 @@ public:
     }
 };
 
-TEST_F(PackedRLEHelperUnitTest, StringIsCorrectlyCompressed)
+TEST_F(PackedRLEHelperUnitTest, StringIsCorrectlyDeflated)
 {
     std::string str("00000000000000000000");
     std::vector<byte> raw(str.begin(), str.end());
