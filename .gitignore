@@ -35,6 +35,7 @@ CMakeScripts
 CMakeFiles
 CMakeCache*
 cmake_install.cmake
+*.cmake
 
 ## --------------------------
 ## Unix files
