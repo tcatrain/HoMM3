@@ -20,12 +20,12 @@ public:
 
 TEST_F(PcxUnitTest, PcxIsProperlyLoaded)
 {
-    ASSERT_EQ((uint) 1692, this->pcx_->GetHeader().size);
-    ASSERT_EQ((uint) 3, this->pcx_->GetHeader().type);
-    ASSERT_EQ((uint) 96, this->pcx_->GetHeader().flwidth);
-    ASSERT_EQ((uint) 64, this->pcx_->GetHeader().flheight);
-    ASSERT_EQ((uint) 96, this->pcx_->GetHeader().fmwidth);
-    ASSERT_EQ((uint) 55, this->pcx_->GetHeader().fmheight);
-    ASSERT_EQ((uint) 0, this->pcx_->GetHeader().xmargin);
-    ASSERT_EQ((uint) 5, this->pcx_->GetHeader().ymargin);
+    ASSERT_EQ((uint) 1692, this->pcx_->Header().size);
+    ASSERT_EQ((uint) 3, this->pcx_->Header().type);
+    ASSERT_EQ((uint) 96, this->pcx_->Header().flwidth);
+    ASSERT_EQ((uint) 64, this->pcx_->Header().flheight);
+    ASSERT_EQ((uint) 96, this->pcx_->Header().fmwidth);
+    ASSERT_EQ((uint) 55, this->pcx_->Header().fmheight);
+    ASSERT_EQ((uint) 0, this->pcx_->Header().xmargin);
+    ASSERT_EQ((uint) 5, this->pcx_->Header().ymargin);
 }

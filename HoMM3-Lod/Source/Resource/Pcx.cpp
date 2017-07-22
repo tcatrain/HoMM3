@@ -26,9 +26,9 @@ namespace HoMM3
         void Pcx::LoadHeader_()
         {
             AResource::LoadHeader_();
-            this->rlecompressor_.SetChunkSize(32);
-            this->rlecompressor_.SetUnpackedSize(this->header_.fmheight * this->header_.fmwidth);
-            this->rlecompressor_.SetUnpackedChunkSize(32);
+            this->rlecompressor_.ChunkSize(32);
+            this->rlecompressor_.UnpackedSize(this->header_.fmheight * this->header_.fmwidth);
+            this->rlecompressor_.UnpackedChunkSize(32);
         }
         
         /// <summary>Method used to load the entries headers of the LOD file</summary>

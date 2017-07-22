@@ -36,15 +36,15 @@ namespace HoMM3
         public:
             /// <summary>Sets the size of a byte chunk</summary>
             /// <param name="cnk_size">The chunk size</param>
-            void SetChunkSize(uint);
+            void ChunkSize(uint);
             
             /// <summary>Sets the total size to unpack</summary>
             /// <param name="cnk_nb">The size to unpack</param>
-            void SetUnpackedSize(uint);
+            void UnpackedSize(uint);
             
             /// <summary>Sets the minimal size of an unpacked chunk</summary>
             /// <param name="unpked_minsize">The minimal unpacked chunk size</param>
-            void SetUnpackedChunkSize(uint);
+            void UnpackedChunkSize(uint);
             
             /// <summary>Method used to inflate a deflated byte vector</summary>
             /// <param name="in_bytes">The input deflated byte vector</param>

@@ -111,14 +111,28 @@ namespace HoMM3
             /// Pixels of the bitmap
             std::vector<byte> pixels_;
             
-            /// Prepare the header according to bitmap setup
+            /// <summary>Prepare the bitmap header before creating the bitmap byte vector</summary>
             void PrepareHeader_();
+            
         public:
+            /// <summary>Constructor of the class HoMM3::Image::Bitmap</summary>
             Bitmap();
-            BitmapInfos& GetInfos();
-            void SetPalette(BitmapColor*);
-            void SetPixels(const std::vector<byte>&);
-            const std::vector<byte> Create();
+            
+            /// <summary>Getter for the bitmap infos</summary>
+            /// <returns>The bitmap infos</returns>
+            BitmapInfos& Infos();
+            
+            /// <summary>Setter for the bitmap palette</summary>
+            /// <param name="palette">The bitmap palette</returns>
+            void Palette(BitmapColor*);
+            
+            /// <summary>Setter for the bitmap pixels</summary>
+            /// <param name="pixels">The bitmap pixels</returns>
+            void Pixels(const std::vector<byte>&);
+            
+            /// <summary>Method used to generate the actual bitmap byte vector</summary>
+            /// <returns>The bitmap byte vector</returns>
+            const std::vector<byte>& Create();
         };
     }
 }

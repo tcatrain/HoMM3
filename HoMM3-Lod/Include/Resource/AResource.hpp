@@ -13,14 +13,14 @@ namespace HoMM3
     namespace Resource
     {
         /// <summary>Abstract Template Class AResource<Header, EntryHeader></summary>
-        template <typename Header, typename EntryHeader>
+        template <typename THeader, typename TEntryHeader>
         class AResource
         {
         protected:
             /// The header of the Resource file
-            Header header_;
+            THeader header_;
             /// The entries headers of the Resource file
-            std::vector<std::unique_ptr<EntryHeader>> entries_headers_;
+            std::vector<std::unique_ptr<TEntryHeader>> entries_headers_;
             /// The input file stream to the Resource file
             std::ifstream ifs_;
         
@@ -65,14 +65,14 @@ namespace HoMM3
             
             /// <summary>Getter for Resource file header</summary>
             /// <returns>The Resource file header</returns>
-            const Header& GetHeader() const
+            const THeader& Header() const
             {
                 return (this->header_);
             }
             
             /// <summary>Getter for the Resource file entries headers</summary>
             /// <returns>The Resource file entries headers</returns>
-            const std::vector<std::unique_ptr<EntryHeader>>& GetEntriesHeaders() const
+            const std::vector<std::unique_ptr<TEntryHeader>>& EntriesHeaders() const
             {
                 return (this->entries_headers_);
             }
@@ -82,7 +82,7 @@ namespace HoMM3
             /// <param name="os">Output stream to write in by reference</param>
             /// <param name="resource">Resource object by reference</param>
             /// <returns>The outstream given in input</returns>
-            friend std::ostream& operator <<(std::ostream& os, const AResource<Header, EntryHeader>& resource)
+            friend std::ostream& operator <<(std::ostream& os, const AResource<THeader, TEntryHeader>& resource)
             {
                 resource.Dump_(os);
                 return (os);

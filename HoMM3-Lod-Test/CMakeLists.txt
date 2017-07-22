@@ -11,6 +11,7 @@ set(HOMM3_LOD_TEST_INCLUDE "${HOMM3_LOD_TEST_ROOT_DIR}/Include")
 homm3_files(${PROJECT_NAME} ${HOMM3_LOD_TEST_SOURCE}
     HoMM3-Lod-Test.cpp
     Compression/ZHelperUnitTest.cpp
+    Compression/PackedRLEHelperUnitTest.cpp
     Resource/LodUnitTest.cpp
     Resource/DefUnitTest.cpp
     Resource/PcxUnitTest.cpp

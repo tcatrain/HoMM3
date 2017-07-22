@@ -7,58 +7,6 @@ namespace HoMM3
 {
     namespace Compression
     {
-        /// <summary>Sets the size of a byte chunk</summary>
-        /// <param name="cnk_size">The chunk size</param>
-        void PackedRLEHelper::SetChunkSize(uint cnk_size)
-        {
-            this->chunk_size_ = cnk_size;
-        }
-        
-        /// <summary>Sets the number of chunk to read</summary>
-        /// <param name="cnk_nb">The number of chunk</param>
-        void PackedRLEHelper::SetUnpackedSize(uint unpked_size)
-        {
-            this->unpked_size_ = unpked_size;
-        }
-        
-        /// <summary>Sets the minimal size of an unpacked chunk</summary>
-        /// <param name="unpked_minsize">The minimal unpacked chunk size</param>
-        void PackedRLEHelper::SetUnpackedChunkSize(uint unpked_minsize)
-        {
-            this->unpked_minsize_ = unpked_minsize;
-        }
-        
-        /// <summary>Method used to inflate a deflated byte vector</summary>
-        /// <param name="in_bytes">The input deflated byte vector</param>
-        /// <returns>The output inflated byte vector</returns>
-        std::vector<byte>& PackedRLEHelper::Inflate(const std::vector<byte> &in_bytes)
-        {
-            std::vector<byte>* out_bytes = new std::vector<byte>();
-            for (uint i = 0; i < in_bytes.size(); ++i)
-            {
-                out_bytes->push_back(in_bytes[i]);
-            }
-            return *out_bytes;
-        }
-        
-        /// <summary>Method used to deflate an inflated byte vector</summary>
-        /// <param name="in_bytes">The input inflated byte vector</param>
-        /// <returns>The output deflated byte vector</returns>
-        std::vector<byte>& PackedRLEHelper::Deflate(const std::vector<byte> &in_bytes)
-        {
-            std::vector<byte>* out_bytes = new std::vector<byte>();
-            usint chunk_offset;
-            
-            for (uint i = 0; i < this->unpked_size_ / this->chunk_size_; ++i)
-            {
-                /// Reads the next 2 bytes to get the offset of the next chunk within the sequence
-                chunk_offset = *reinterpret_cast<const usint*>(&in_bytes[i * sizeof(usint)]);
-                /// Then position the cursor to the byte sequence starting at $offset
-                this->UnpackChunk_(in_bytes.data() + chunk_offset, *out_bytes);
-            }
-            return *out_bytes;
-        }
-        
         /// <summary>Method used to unpack the chunk starting at a provided address</summary>
         /// <param name="chunk_addr">The address of the chunk to process</param>
         /// <returns>The vector containing chunk's bytes</returns>
@@ -106,6 +54,58 @@ namespace HoMM3
             }
             this->nb_read_++;
             return length;
+        }
+        
+        /// <summary>Sets the size of a byte chunk</summary>
+        /// <param name="cnk_size">The chunk size</param>
+        void PackedRLEHelper::ChunkSize(uint cnk_size)
+        {
+            this->chunk_size_ = cnk_size;
+        }
+        
+        /// <summary>Sets the number of chunk to read</summary>
+        /// <param name="cnk_nb">The number of chunk</param>
+        void PackedRLEHelper::UnpackedSize(uint unpked_size)
+        {
+            this->unpked_size_ = unpked_size;
+        }
+        
+        /// <summary>Sets the minimal size of an unpacked chunk</summary>
+        /// <param name="unpked_minsize">The minimal unpacked chunk size</param>
+        void PackedRLEHelper::UnpackedChunkSize(uint unpked_minsize)
+        {
+            this->unpked_minsize_ = unpked_minsize;
+        }
+        
+        /// <summary>Method used to deflate an inflated byte vector</summary>
+        /// <param name="in_bytes">The input inflated byte vector</param>
+        /// <returns>The output deflated byte vector</returns>
+        std::vector<byte>& PackedRLEHelper::Inflate(const std::vector<byte> &in_bytes)
+        {
+            std::vector<byte>* out_bytes = new std::vector<byte>();
+            usint chunk_offset;
+            
+            for (uint i = 0; i < this->unpked_size_ / this->chunk_size_; ++i)
+            {
+                /// Reads the next 2 bytes to get the offset of the next chunk within the sequence
+                chunk_offset = *reinterpret_cast<const usint*>(&in_bytes[i * sizeof(usint)]);
+                /// Then position the cursor to the byte sequence starting at $offset
+                this->UnpackChunk_(in_bytes.data() + chunk_offset, *out_bytes);
+            }
+            return *out_bytes;
+        }
+        
+        /// <summary>Method used to inflate a deflated byte vector</summary>
+        /// <param name="in_bytes">The input deflated byte vector</param>
+        /// <returns>The output inflated byte vector</returns>
+        std::vector<byte>& PackedRLEHelper::Deflate(const std::vector<byte> &in_bytes)
+        {
+            std::vector<byte>* out_bytes = new std::vector<byte>();
+            for (uint i = 0; i < in_bytes.size(); ++i)
+            {
+                out_bytes->push_back(in_bytes[i]);
+            }
+            return *out_bytes;
         }
     }
 }
