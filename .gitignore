@@ -35,7 +35,7 @@ CMakeScripts
 CMakeFiles
 CMakeCache*
 cmake_install.cmake
-*.cmake
+
 
 ## --------------------------
 ## Unix files
@@ -50,5 +50,4 @@ Makefile
 ## --------------------------
 Dependencies/zlib-1.2.8/CTestTestfile.cmake
 Dependencies/zlib-1.2.8/zlib.pc
-
 Dependencies/zlib-1\.2\.8/zconf\.h
