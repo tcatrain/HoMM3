@@ -173,10 +173,13 @@ homm3_setup()
 
 
 add_subdirectory( ${HOMM3_ROOT_DIR}/Dependencies/zlib-1.2.8 )
-set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/zlib-1.2.8)
+set( ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/zlib-1.2.8 )
 
 add_subdirectory( ${HOMM3_ROOT_DIR}/Dependencies/googletest )
-set(GOOGLETEST_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/googletest/include)
+set( GOOGLETEST_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/googletest/include )
+
+add_subdirectory( ${HOMM3_ROOT_DIR}/Dependencies/sfml-2.4.2 )
+set( ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/sfml-2.4.2/include )
 
 add_subdirectory( ${HOMM3_ROOT_DIR}/HoMM3-Lod )
 add_subdirectory( ${HOMM3_ROOT_DIR}/HoMM3-Lod-Test )
