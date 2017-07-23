@@ -9,6 +9,7 @@ namespace HoMM3
     {
         /// <summary>Method used to unpack the chunk starting at a provided address</summary>
         /// <param name="chunk_addr">The address of the chunk to process</param>
+        /// <param name="out_bytes">The output byte vector</param>
         /// <returns>The vector containing chunk's bytes</returns>
         void PackedRLEHelper::UnpackChunk_(const byte* chunk_addr, std::vector<byte>& out_bytes)
         {
@@ -19,8 +20,9 @@ namespace HoMM3
             {
                 length = this->UnpackNext_(chunk_addr);
                 /// Appends the buffer to the end of chunk bytes
-                out_bytes.insert(out_bytes.end(), this->buffer_, this->buffer_ + length);
+                out_bytes.insert(out_bytes.end(), this->buffer_.begin(), this->buffer_.end());
                 rowlength += length;
+                this->buffer_.clear();
             } while(rowlength < this->unpked_minsize_);
         }
         
@@ -35,22 +37,24 @@ namespace HoMM3
             uint length = (current & (uint) 0b11111) + 1;
             /// The key of the sequence is defined in the first 3 bits if the byte
             uint key = current >> 5;
-            this->buffer_ = new byte[length];
-            
+
             /// If the key is bin(111), the sequence must be read as is from the input
             if (key == 0b111)
             {
-                for (uint j = 0; j < length; ++j)
+                for (uint i = 0; i < length; ++i)
                 {
                     /// Reads the next $length bytes as the output sequence
-                    this->buffer_[j] = *(chunk_addr + this->nb_read_ + j + 1);
+                    this->buffer_.push_back(*(chunk_addr + this->nb_read_ + i + 1));
                 }
                 this->nb_read_ += length;
             }
             else
             {
                 /// If the key is not bin(111), then the sequence is a repetition of $length $key
-                std::fill_n(this->buffer_, length, key);
+                for (uint i = 0; i < length; ++i)
+                {
+                    this->buffer_.push_back(key);
+                }
             }
             this->nb_read_++;
             return length;
@@ -58,69 +62,99 @@ namespace HoMM3
 
         /// <summary>Method used to pack the chunk starting at a provided address</summary>
         /// <param name="chunk_addr">The address of the chunk to process</param>
+        /// <param name="out_bytes">The output byte vector</param>
         void PackedRLEHelper::PackChunk_(const byte* chunk_addr, std::vector<byte>& out_bytes)
         {
-            byte current, previous = *chunk_addr;
-            std::vector<byte> buffer;
+            byte current = *chunk_addr;
 
-            this->nb_read_ = previous < 7 ? 1 : 0;
+            /// Keep in mind the RLE byte actually count as 1 in the repetition count
+            this->nb_read_ = RLE_NBREAD_WITH_KEY(current);
             for (uint i = 1; i < this->chunk_size_; ++i)
             {
                 current = *(chunk_addr + i);
+                /// Checks whether an RLE segment was started or not
                 if (this->nb_read_ > 0)
                 {
-                    if (current == previous)
-                    {
-                        ++this->nb_read_;
-                    }
-                    else
-                    {
-                        out_bytes.push_back((previous << 5) | (this->nb_read_ - 1));
-                        if (current < 7)
-                        {
-                            this->nb_read_ = 1;
-                        }
-                        else
-                        {
-                            this->nb_read_ = 0;
-                            buffer.clear();
-                            buffer.push_back(current);
-                        }
-                        previous = current;
-                    }
+                    this->KeepOnRLE_(current, *(chunk_addr + i - 1), out_bytes);
                 }
                 else
                 {
-                    if (current < 7 || buffer.size() > 31)
-                    {
-                        out_bytes.push_back((7 << 5) | (buffer.size() - 1));
-                        out_bytes.insert(out_bytes.end(), buffer.begin(), buffer.end());
-                        if (current < 7)
-                        {
-                            this->nb_read_ = 1;
-                        }
-                        else
-                        {
-                            this->nb_read_ = 0;
-                            buffer.clear();
-                            buffer.push_back(current);
-                        }
-                        previous = current;
-                    }
-                    else
-                    {
-                        buffer.push_back(current);
-                    }
+                    this->KeepOnNonRLE_(current, out_bytes);
                 }
             }
-            if (this->nb_read_ > 0)
+            /// Write the last buffer or pack to the output
+            this->FinalizePackedChunk_(current, out_bytes);
+        }
+
+        /// <summary>Method used to continue packing an RLE segment in the chunk</summary>
+        /// <param name="current">The current byte in the chunk to process</param>
+        /// <param name="previous">The previous byte in the chunk to process</param>
+        /// <param name="out_bytes">The output byte vector</param>
+        void PackedRLEHelper::KeepOnRLE_(const byte& current, const byte& previous, std::vector<byte>& out_bytes)
+        {
+            if (current == previous)
             {
-                out_bytes.push_back((current << 5) | (this->nb_read_ - 1));
+                /// If the current byte is the same as the previous just increase the number of repetition
+                ++this->nb_read_;
             }
             else
             {
-                out_bytes.push_back((7 << 5) | (buffer.size() - 1));
-                out_bytes.insert(out_bytes.end(), buffer.begin(), buffer.end());
+                /// If not, it means the RLE is over for this segment
+                out_bytes.push_back(RLE_ONE_BYTE(previous, this->nb_read_));
+                /// Then reinit the number of repetitions
+                this->nb_read_ = RLE_NBREAD_WITH_KEY(current);
+                if (current >= 7)
+                {
+                    /// Adds current to the buffer if the key is greater than the max key
+                    this->buffer_.push_back(current);
+                }
+            }
+        }
+
+        /// <summary>Method used to continue packing a non RLE segment in the chunk</summary>
+        /// <param name="current">The current byte in the chunk to process</param>
+        /// <param name="out_bytes">The output byte vector</param>
+        void PackedRLEHelper::KeepOnNonRLE_(const byte& current, std::vector<byte>& out_bytes)
+        {
+            if (current >= 7 && this->buffer_.size() < this->chunk_size_)
+            {
+                /// If current is greater than the max key and buffer is not full, just adds current to the buffer
+                this->buffer_.push_back(current);
+            }
+            else
+            {
+                /// If one of the previous conditions are not met, the non RLE is over for this segment
+                /// First add the raw data indicator to the output bytes
+                out_bytes.push_back(RLE_ONE_BYTE(7, this->buffer_.size()));
+                /// Then copy the content of the buffer to the output bytes and clear the buffer
+                out_bytes.insert(out_bytes.end(), this->buffer_.begin(), this->buffer_.end());
+                this->buffer_.clear();
+                /// Then reinit the number of repetitions
+                this->nb_read_ = RLE_NBREAD_WITH_KEY(current);
+                if (current >= 7)
+                {
+                    /// Adds current to the buffer if the key is greater than the max key
+                    this->buffer_.push_back(current);
+                }
+            }
+        }
+
+        /// <summary>Method used to finalize the chunk packing</summary>
+        /// <param name="current">The current byte in the chunk to process</param>
+        /// <param name="out_bytes">The output byte vector</param>
+        void PackedRLEHelper::FinalizePackedChunk_(const byte& current, std::vector<byte>& out_bytes)
+        {
+            if (this->nb_read_ > 0)
+            {
+                /// If RLE was started add current to output bytes
+                out_bytes.push_back(RLE_ONE_BYTE(current, this->nb_read_));
+            }
+            else
+            {
+                /// If non RLE was started, first add the raw data indicator to the output bytes
+                out_bytes.push_back(RLE_ONE_BYTE(7, this->buffer_.size()));
+                /// Then copy the content of the buffer to the output bytes and clear the buffer
+                out_bytes.insert(out_bytes.end(), this->buffer_.begin(), this->buffer_.end());
             }
         }
         
@@ -157,8 +191,11 @@ namespace HoMM3
             std::vector<byte>* out_bytes = new std::vector<byte>();
             for (uint i = 0; i < chunk_nb; ++i)
             {
-                offset = (uint) out_bytes->size() +  chunk_nb * sizeof(usint) - i * sizeof(usint);
+                /// The chunk offset should be the total size of the headers + the current size of the output bytes - the size of already written headers
+                offset = (uint) (out_bytes->size() +  chunk_nb * sizeof(usint) - i * sizeof(usint));
+                /// Adds the chunk header to the out_bytes, just after previously added headers
                 out_bytes->insert(out_bytes->begin() + i * sizeof(usint), reinterpret_cast<byte*>(&offset), reinterpret_cast<byte*>(&offset) + sizeof(usint));
+                /// Then pack the next chunk
                 this->PackChunk_(in_bytes.data() + i * this->chunk_size_, *out_bytes);
             }
             return *out_bytes;
