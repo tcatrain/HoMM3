@@ -103,7 +103,7 @@ namespace HoMM3
                 out_bytes.push_back(RLE_ONE_BYTE(previous, this->nb_read_));
                 /// Then reinit the number of repetitions
                 this->nb_read_ = RLE_NBREAD_WITH_KEY(current);
-                if (current >= 7)
+                if (current >= 0b111)
                 {
                     /// Adds current to the buffer if the key is greater than the max key
                     this->buffer_.push_back(current);
@@ -116,7 +116,7 @@ namespace HoMM3
         /// <param name="out_bytes">The output byte vector</param>
         void PackedRLEHelper::KeepOnNonRLE_(const byte& current, std::vector<byte>& out_bytes)
         {
-            if (current >= 7 && this->buffer_.size() < this->chunk_size_)
+            if (current >= 0b111 && this->buffer_.size() < this->chunk_size_)
             {
                 /// If current is greater than the max key and buffer is not full, just adds current to the buffer
                 this->buffer_.push_back(current);
@@ -125,13 +125,13 @@ namespace HoMM3
             {
                 /// If one of the previous conditions are not met, the non RLE is over for this segment
                 /// First add the raw data indicator to the output bytes
-                out_bytes.push_back(RLE_ONE_BYTE(7, this->buffer_.size()));
+                out_bytes.push_back(RLE_ONE_BYTE(0b111, this->buffer_.size()));
                 /// Then copy the content of the buffer to the output bytes and clear the buffer
                 out_bytes.insert(out_bytes.end(), this->buffer_.begin(), this->buffer_.end());
                 this->buffer_.clear();
                 /// Then reinit the number of repetitions
                 this->nb_read_ = RLE_NBREAD_WITH_KEY(current);
-                if (current >= 7)
+                if (current >= 0b111)
                 {
                     /// Adds current to the buffer if the key is greater than the max key
                     this->buffer_.push_back(current);
