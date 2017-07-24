@@ -29,7 +29,6 @@ message( STATUS "HOMM3_LOD_TEST_ROOT_DIR: ${HOMM3_LOD_TEST_ROOT_DIR}" )
 message( STATUS "HOMM3_SHARED_LIB: ${HOMM3_SHARED_LIB}" )
 # --------------------------
 
-
 # --------------------------
 # Build section
 # --------------------------
@@ -45,7 +44,6 @@ target_include_directories( ${PROJECT_NAME}
         ${HOMM3_LOD_TEST_ROOT_DIR}/Include
         ${HoMM3_Lod_SOURCE_DIR}/Include
 		${GOOGLETEST_INCLUDE_DIR}
-
 )
 
 # Link required libraries to the project
@@ -56,6 +54,8 @@ target_link_libraries( ${PROJECT_NAME}
 		gtest_main
 		gmock
 		gmock_main
+		sfml-graphics
+		sfml-audio
 )
 
 # copy of dll from HoMM3_Lod

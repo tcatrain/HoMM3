@@ -5,6 +5,12 @@ Debug
 x64
 *.dir
 HoMM3-Lod-Test/HoMM3_Lod_Test
+HoMM3-Lod/libHoMM3_Lod\.dll
+HoMM3-Lod/libzlib\.dll
+HoMM3-Lod-Test/HoMM3_Lod_Test\.exe
+HoMM3-Lod-Test/libHoMM3_Lod\.dll
+HoMM3-Lod-Test/libzlib\.dll
+HoMM3\.cbp
 
 ## --------------------------
 ## XCode project files
@@ -51,3 +57,13 @@ Makefile
 Dependencies/zlib-1.2.8/CTestTestfile.cmake
 Dependencies/zlib-1.2.8/zlib.pc
 Dependencies/zlib-1\.2\.8/zconf\.h
+Dependencies/googletest/googlemock/gtest/CTestTestfile\.cmake
+Dependencies/googletest/googlemock/gtest/gtest\.cbp
+Dependencies/googletest/googlemock/CTestTestfile\.cmake
+Dependencies/googletest/googlemock/gmock\.cbp
+Dependencies/googletest/CTestTestfile\.cmake
+Dependencies/googletest/googletest-distribution\.cbp
+Dependencies/sfml-2\.4\.2/SFML\.cbp
+Dependencies/zlib-1\.2\.8/libzlib\.dll
+Dependencies/zlib-1\.2\.8/zlib\.cbp
+Dependencies/zlib-1\.2\.8/zlib1rc\.obj
