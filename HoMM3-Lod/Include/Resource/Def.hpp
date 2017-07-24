@@ -48,7 +48,7 @@ namespace HoMM3
         /// 0x0C number of sequences
         /// 0x10 sequence's rgb palette
         /// </summary>
-        struct DefHeader
+        struct HOMM3_LOD_LIB DefHeader
         {
             /// Size of the rgb palette of the DEF header
             static uint const DEFH_PAL_SIZE = 256;
@@ -71,7 +71,7 @@ namespace HoMM3
         /// 0x00 name of the sequence frame
         /// 0x0C offset of the sequence frame
         /// </summary>
-        struct DefSequenceFrame
+        struct HOMM3_LOD_LIB DefSequenceFrame
         {
             /// Size of the name of a sequence entry
             static uint const DEF_SEQEH_NAME_SIZE = 13;
@@ -90,7 +90,7 @@ namespace HoMM3
         /// 0x08 first unknown section
         /// 0x0C second unknown section
         /// </summary>
-        struct DefSequenceHeader
+        struct HOMM3_LOD_LIB DefSequenceHeader
         {
             /// Size of sequence section directly mappable from the resource
             static uint const DEF_SEQH_FIXED_SIZE = sizeof(uint) * 4;

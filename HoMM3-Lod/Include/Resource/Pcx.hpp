@@ -23,7 +23,7 @@ namespace HoMM3
         /// 0x18 x margin of the PCX frame
         /// 0x1C y margin of the PCX frame
         /// </summary>
-        struct PcxHeader {
+        struct HOMM3_LOD_LIB PcxHeader {
             /// The size of the frame
             uint size;
             /// The encoding type of the frame

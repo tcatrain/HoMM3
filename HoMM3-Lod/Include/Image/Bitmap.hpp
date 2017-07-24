@@ -16,7 +16,7 @@ namespace HoMM3
         /// 0x06 reserved section
         /// 0x0A offset of the pixel array
         /// </summary>
-        struct BitmapHeader
+        struct HOMM3_LOD_LIB BitmapHeader
         {
             /// The type of bitmap (should be 0x424D)
             usint type;
@@ -51,7 +51,7 @@ namespace HoMM3
         /// 0x1E number of colors in the palette
         /// 0x22 number of important colors in the palette (0 if all)
         /// </summary>
-        struct BitmapInfos
+        struct HOMM3_LOD_LIB BitmapInfos
         {
             /// The size of the pixel array
             uint infossize;
@@ -86,7 +86,7 @@ namespace HoMM3
         /// 0x02 red value
         /// 0x03 unused alpha value
         /// </summary>
-        struct BitmapColor
+        struct HOMM3_LOD_LIB BitmapColor
         {
             /// The blue value of the color
             byte b;
@@ -99,7 +99,7 @@ namespace HoMM3
         };
         #pragma pack(pop)
 
-        class Bitmap
+        class HOMM3_LOD_LIB Bitmap
         {
         private:
             /// The header of the bitmap
