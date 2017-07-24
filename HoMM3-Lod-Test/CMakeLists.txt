@@ -43,6 +43,7 @@ target_include_directories( ${PROJECT_NAME}
     PUBLIC
         ${HOMM3_LOD_TEST_ROOT_DIR}/Include
         ${HoMM3_Lod_SOURCE_DIR}/Include
+		${ZLIB_INCLUDE_DIR}
 		${GOOGLETEST_INCLUDE_DIR}
 )
 
