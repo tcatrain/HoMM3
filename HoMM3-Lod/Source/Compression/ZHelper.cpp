@@ -17,7 +17,7 @@ namespace HoMM3
         {
             std::vector<byte>* out_bytes = new std::vector<byte>();
             uLongf out_size = static_cast<uLongf>(in_bytes.size());
-            int status = Z_BUF_ERROR;
+            int status;
             
             do
             {
