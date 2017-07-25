@@ -71,14 +71,12 @@ namespace HoMM3
         /// <returns>The byte vector containing the bitmap frame</returns>
         std::vector<byte>& Pcx::ReadFrame()
         {
-            byte buf[this->header_.size];
+            std::vector<byte> buffer(this->header_.size);
 
             /// Don't forget to start after the header of the PCX file
             this->ifs_.seekg(sizeof(this->header_), this->ifs_.beg);
-            this->ifs_.read(reinterpret_cast<char*>(&buf), sizeof(buf));
-            /// Fill in the vector to be processed by the compressor
-            std::vector<byte>* buffer = new std::vector<byte>(buf, buf + this->header_.size);
-            return this->Mould_(this->rlecompressor_.Inflate(*buffer));
+            this->ifs_.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
+            return this->Mould_(this->rlecompressor_.Inflate(buffer));
         }
     }
 }
