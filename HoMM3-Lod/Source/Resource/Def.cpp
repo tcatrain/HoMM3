@@ -116,7 +116,7 @@ namespace HoMM3
                 this->ifs_.seekg(seqh.seq_frames[i]->offset, this->ifs_.beg);
                 /// The whole pcx contains the frame + the header
                 std::vector<byte> frame(size + sizeof(PcxHeader));
-                this->ifs_.read(reinterpret_cast<char*>(&frame[0]), frame.size());
+                this->ifs_.read(reinterpret_cast<char*>(frame.data()), frame.size());
                 frames->push_back(frame);
             }
             return *frames;
