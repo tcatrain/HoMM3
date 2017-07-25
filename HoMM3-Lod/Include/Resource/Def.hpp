@@ -94,7 +94,12 @@ namespace HoMM3
         {
             /// Size of sequence section directly mappable from the resource
             static uint const DEF_SEQH_FIXED_SIZE = sizeof(uint) * 4;
-            
+
+            /// Explicitly deleting copy and default constructors to handle VS crap
+            DefSequenceHeader() = default;
+            DefSequenceHeader(DefSequenceHeader const&) = delete;
+            DefSequenceHeader& operator=(DefSequenceHeader const&) const = delete;
+
             /// Type of the sequence
             uint type;
             /// Number of frames in the sequence
