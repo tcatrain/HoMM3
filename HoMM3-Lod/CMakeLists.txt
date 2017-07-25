@@ -62,6 +62,7 @@ endif()
 target_include_directories( ${PROJECT_NAME}
     PUBLIC
         ${HOMM3_LOD_ROOT_DIR}/Include
+        ${zlib_SOURCE_DIR}
         ${ZLIB_INCLUDE_DIR}
 )
 
