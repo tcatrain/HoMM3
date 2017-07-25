@@ -9,7 +9,6 @@ public:
     virtual void SetUp()
     {
         this->pcx_ = new HoMM3::Resource::Pcx("ab01_01.pcx");
-        this->pcx_->Load();
     }
 
     virtual void TearDown()

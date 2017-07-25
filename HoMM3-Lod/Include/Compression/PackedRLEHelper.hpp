@@ -29,18 +29,17 @@ namespace HoMM3
             /// <summary>Method used to unpack the chunk starting at a provided address</summary>
             /// <param name="chunk_addr">The address of the chunk to process</param>
             /// <param name="out_bytes">The output byte vector</param>
-            /// <returns>The vector containing chunk's bytes</returns>
-            void UnpackChunk_(const byte*, std::vector<byte>&);
+            void UnpackChunk_(const byte *, std::vector<byte>&);
             
             /// <summary>Method used to unpack the next sequence for the current chunk</summary>
             /// <param name="chunk_addr">The address of the chunk to process</param>
             /// <returns>The length of the unpacked segment</returns>
-            uint UnpackNext_(const byte*);
+            uint UnpackNext_(const byte *);
 
             /// <summary>Method used to pack the chunk starting at a provided address</summary>
             /// <param name="chunk_addr">The address of the chunk to process</param>
             /// <param name="out_bytes">The output byte vector</param>
-            void PackChunk_(const byte*, std::vector<byte>&);
+            void PackChunk_(const byte *, std::vector<byte>&);
 
             /// <summary>Method used to continue packing an RLE segment in the chunk</summary>
             /// <param name="current">The current byte in the chunk to process</param>

@@ -43,7 +43,7 @@ namespace HoMM3
         };
         #pragma pack(pop)
         
-        class HOMM3_LOD_LIB Pcx : public AResource<PcxHeader, void*>
+        class HOMM3_LOD_LIB Pcx : public AResource<PcxHeader, void *>
         {
         private:
             /// The RLE compressor used to extract bitmaps from the PCX

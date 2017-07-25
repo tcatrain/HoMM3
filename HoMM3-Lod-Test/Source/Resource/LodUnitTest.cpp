@@ -9,7 +9,6 @@ public:
     virtual void SetUp()
     {
         this->lod_ = new HoMM3::Resource::Lod("txt_content.lod");
-        this->lod_->Load();
     }
 
     virtual void TearDown()

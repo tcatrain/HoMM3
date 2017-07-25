@@ -7,8 +7,6 @@ namespace HoMM3
     {
         /// <summary>Outstream operator overload used for writing</summary>
         /// <param name="os">Output stream to write in by reference</param>
-        /// <param name="resource">DEF resource object by reference</param>
-        /// <returns>The outstream given in input</returns>
         void Def::Dump_(std::ostream& os) const
         {
             os << "---DEF FILE---" << std::endl;
@@ -67,7 +65,7 @@ namespace HoMM3
                 this->ifs_.seekg(-sizeof(sequence_entry_header.offset) * current + -sizeof(sequence_entry_header.name) * (outof - current), this->ifs_.cur);
             }
             /// Read the frame name
-            this->ifs_.read(reinterpret_cast<char*>(&sequence_entry_header.name), sizeof(sequence_entry_header.name));
+            this->ifs_.read(reinterpret_cast<char *>(&sequence_entry_header.name), sizeof(sequence_entry_header.name));
         }
         
         /// <summary>Reads the next frame offset for the sequence</summary>
@@ -78,7 +76,7 @@ namespace HoMM3
         {
             this->ifs_.seekg(sizeof(sequence_entry_header.name) * (outof - current - 1) + sizeof(sequence_entry_header.offset) * current, this->ifs_.cur);
             /// Read the frame offset
-            this->ifs_.read(reinterpret_cast<char*>(&sequence_entry_header.offset), sizeof(sequence_entry_header.offset));
+            this->ifs_.read(reinterpret_cast<char *>(&sequence_entry_header.offset), sizeof(sequence_entry_header.offset));
         }
         
     	/// <summary>
@@ -88,6 +86,10 @@ namespace HoMM3
         /// <param name="path">Path of the DEF file to load</param>
         Def::Def(const std::string& path) : AResource(path)
         {
+            if (this->ifs_.is_open())
+            {
+                this->Load();
+            }
         }
     	
         /// <summary>Destructor if the class HoMM3::Resource::Def</summary>
@@ -104,22 +106,25 @@ namespace HoMM3
         /// <returns>The vector containing the list of frame</returns>
         const std::vector<std::vector<byte>>& Def::ReadSequence(const DefSequenceHeader& seqh)
         {
-            std::vector<std::vector<byte>>* frames = new std::vector<std::vector<byte>>();
-            
-            for (uint i = 0, n = seqh.nb, size; i < n; ++i)
+            std::vector<std::vector<byte>> *frames = new std::vector<std::vector<byte>>();
+
+            if (this->loaded_)
             {
-                /// Position the cursor to the offset from the frame header
-                this->ifs_.seekg(seqh.seq_frames[i]->offset, this->ifs_.beg);
-                /// Read the first uint containing the size of the frame
-                this->ifs_.read(reinterpret_cast<char*>(&size), sizeof(size));
-                /// Go back to the offset from the frame header
-                this->ifs_.seekg(seqh.seq_frames[i]->offset, this->ifs_.beg);
-                /// The whole pcx contains the frame + the header
-                std::vector<byte> frame(size + sizeof(PcxHeader));
-                this->ifs_.read(reinterpret_cast<char*>(frame.data()), frame.size());
-                frames->push_back(frame);
+                for (uint i = 0, n = seqh.nb, size; i < n; ++i)
+                {
+                    /// Position the cursor to the offset from the frame header
+                    this->ifs_.seekg(seqh.seq_frames[i]->offset, this->ifs_.beg);
+                    /// Read the first uint containing the size of the frame
+                    this->ifs_.read(reinterpret_cast<char *>(&size), sizeof(size));
+                    /// Go back to the offset from the frame header
+                    this->ifs_.seekg(seqh.seq_frames[i]->offset, this->ifs_.beg);
+                    /// The whole pcx contains the frame + the header
+                    std::vector<byte> frame(size + sizeof(PcxHeader));
+                    this->ifs_.read(reinterpret_cast<char *>(frame.data()), frame.size());
+                    frames->push_back(frame);
+                }
             }
-            return *frames;
+            return (*frames);
         }
     }
 }

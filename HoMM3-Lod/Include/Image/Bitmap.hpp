@@ -123,11 +123,11 @@ namespace HoMM3
             BitmapInfos& Infos();
             
             /// <summary>Setter for the bitmap palette</summary>
-            /// <param name="palette">The bitmap palette</returns>
-            void Palette(BitmapColor*);
+            /// <param name="palette">The bitmap palette</param>
+            void Palette(BitmapColor *);
             
             /// <summary>Setter for the bitmap pixels</summary>
-            /// <param name="pixels">The bitmap pixels</returns>
+            /// <param name="pixels">The bitmap pixels</param>
             void Pixels(const std::vector<byte>&);
             
             /// <summary>Method used to generate the actual bitmap byte vector</summary>

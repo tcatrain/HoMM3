@@ -23,6 +23,8 @@ namespace HoMM3
             std::vector<std::unique_ptr<TEntryHeader>> entries_headers_;
             /// The input file stream to the Resource file
             std::ifstream ifs_;
+            /// The state of the resource, loaded or not
+            bool loaded_;
         
             /// <summary>
             /// Constructor of the class HoMM3::Resource::AResource. Opens the input file stream.
@@ -30,6 +32,7 @@ namespace HoMM3
             /// <param name="path">Path of the Resource file to load</param>
             AResource(const std::string& path) : ifs_(path, std::ios::binary)
             {
+                this->loaded_ = false;
             }
             
             /// <summary>Destructor if the class HoMM3::Resource::AResource</summary>
@@ -42,7 +45,7 @@ namespace HoMM3
             /// <summary>Method used to load the header of the Resource file</summary>
             virtual void LoadHeader_()
             {
-                this->ifs_.read(reinterpret_cast<char*>(&this->header_), sizeof(this->header_));
+                this->ifs_.read(reinterpret_cast<char *>(&this->header_), sizeof(this->header_));
             }
             
             /// <summary>Method used to load the entries headers of the Resource file</summary>
@@ -61,6 +64,7 @@ namespace HoMM3
             {
                 this->LoadHeader_();
                 this->LoadEntriesHeaders_();
+                this->loaded_ = true;
             }
             
             /// <summary>Getter for Resource file header</summary>

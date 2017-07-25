@@ -6,8 +6,6 @@ namespace HoMM3
     {
         /// <summary>Outstream operator overload used for writing</summary>
         /// <param name="os">Output stream to write in by reference</param>
-        /// <param name="resource">LOD resource object by reference</param>
-        /// <returns>The outstream given in input</returns>
         void Lod::Dump_(std::ostream& os) const
         {
             uint n = this->header_.nb;
@@ -34,7 +32,7 @@ namespace HoMM3
             {
                 std::unique_ptr<LodEntryHeader> up_eh(new LodEntryHeader());
                 
-                this->ifs_.read(reinterpret_cast<char*>(&*up_eh), sizeof(*up_eh));
+                this->ifs_.read(reinterpret_cast<char *>(&*up_eh), sizeof(*up_eh));
                 this->entries_headers_.push_back(std::move(up_eh));
             }
         }
@@ -46,6 +44,10 @@ namespace HoMM3
         /// <param name="path">Path of the LOD file to load</param>
         Lod::Lod(const std::string& path) : AResource(path)
         {
+            if (this->ifs_.is_open())
+            {
+                this->Load();
+            }
         }
 
         /// <summary>Method used to read an entry into the LOD file</summary>
@@ -54,11 +56,15 @@ namespace HoMM3
         const std::vector<byte>& Lod::ReadEntry(const LodEntryHeader& eh)
         {
             bool is_compressed(eh.zsize != 0);
-            std::vector<byte> *entry = new std::vector<byte>(is_compressed ? eh.zsize : eh.size);
-            
-            this->ifs_.seekg(eh.offset, this->ifs_.beg);
-            this->ifs_.read(reinterpret_cast<char*>(entry->data()), entry->size());
-            return (is_compressed ? this->zcompressor_.Inflate(*entry) : *entry);
+            std::vector<byte> *buffer = new std::vector<byte>(is_compressed ? eh.zsize : eh.size), *entry;
+
+            if (this->loaded_)
+            {
+                this->ifs_.seekg(eh.offset, this->ifs_.beg);
+                this->ifs_.read(reinterpret_cast<char *>(buffer->data()), buffer->size());
+                entry = &(is_compressed ? this->zcompressor_.Inflate(*buffer) : *buffer);
+            }
+            return (*entry);
         }
     }
 }

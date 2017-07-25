@@ -15,7 +15,7 @@ namespace HoMM3
         /// <returns>The output inflated byte vector</returns>
         std::vector<byte>& ZHelper::Inflate(const std::vector<byte>& in_bytes)
         {
-            std::vector<byte>* out_bytes = new std::vector<byte>();
+            std::vector<byte> *out_bytes = new std::vector<byte>();
             uLongf out_size = static_cast<uLongf>(in_bytes.size());
             int status;
             
@@ -38,7 +38,7 @@ namespace HoMM3
         std::vector<byte>& ZHelper::Deflate(const std::vector<byte>& in_bytes)
         {
             uLongf out_size = static_cast<uLongf>(compressBound(static_cast<uLong>(in_bytes.size())));
-            std::vector<byte>* out_bytes = new std::vector<byte>(out_size);
+            std::vector<byte> *out_bytes = new std::vector<byte>(out_size);
             compress(out_bytes->data(), &out_size, in_bytes.data(), static_cast<uLong>(in_bytes.size()));
             out_bytes->resize(out_size);
             out_bytes->shrink_to_fit();

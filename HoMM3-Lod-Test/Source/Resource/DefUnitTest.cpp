@@ -9,7 +9,6 @@ public:
     virtual void SetUp()
     {
         this->def_ = new HoMM3::Resource::Def("sprite.def");
-        this->def_->Load();
     }
 
     virtual void TearDown()

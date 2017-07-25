@@ -31,7 +31,7 @@ namespace HoMM3
 
         /// <summary>Setter for the bitmap palette</summary>
         /// <param name="palette">The bitmap palette</returns>
-        void Bitmap::Palette(BitmapColor* palette)
+        void Bitmap::Palette(BitmapColor *palette)
         {
             this->palette_ = palette;
         }
@@ -50,10 +50,10 @@ namespace HoMM3
             /// First of all prepare the bitmap header
             this->PrepareHeader_();
             
-            byte* header_bytes = reinterpret_cast<byte*>(&this->header_);
-            byte* infos_bytes = reinterpret_cast<byte*>(&this->infos_);
+            byte *header_bytes = reinterpret_cast<byte *>(&this->header_);
+            byte *infos_bytes = reinterpret_cast<byte *>(&this->infos_);
             
-            std::vector<byte>* bitmap_content = new std::vector<byte>();
+            std::vector<byte> *bitmap_content = new std::vector<byte>();
             /// Push the bitmap header first into the vector
             bitmap_content->insert(bitmap_content->end(), header_bytes, header_bytes + sizeof(this->header_));
             /// Push the bitmap infos first into the vector
@@ -75,7 +75,7 @@ namespace HoMM3
                     bitmap_content->push_back(this->pixels_[(this->infos_.height - i) * this->infos_.width + j]);
                 }
             }
-            return *bitmap_content;
+            return (*bitmap_content);
         }
     }
 }

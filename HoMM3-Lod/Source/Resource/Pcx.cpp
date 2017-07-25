@@ -6,8 +6,6 @@ namespace HoMM3
     {
         /// <summary>Outstream operator overload used for writing</summary>
         /// <param name="os">Output stream to write in by reference</param>
-        /// <param name="resource">PCX resource object by reference</param>
-        /// <returns>The outstream given in input</returns>
         void Pcx::Dump_(std::ostream& os) const
         {
             os << "---PCX FILE---" << std::endl;
@@ -54,7 +52,7 @@ namespace HoMM3
             }
             buffer.insert(buffer.begin(), typad.begin(), typad.end());
             buffer.insert(buffer.end(), bypad.begin(), bypad.end());
-            return buffer;
+            return (buffer);
         }
         
         /// <summary>
@@ -64,7 +62,10 @@ namespace HoMM3
         /// <param name="path">Path of the PCX file to load</param>
         Pcx::Pcx(const std::string& path) : AResource(path)
         {
-            
+            if (this->ifs_.is_open())
+            {
+                this->Load();
+            }
         }
         
         /// <summary>Method used to read an entry from the PCX file</summary>
@@ -73,10 +74,14 @@ namespace HoMM3
         {
             std::vector<byte> buffer(this->header_.size);
 
-            /// Don't forget to start after the header of the PCX file
-            this->ifs_.seekg(sizeof(this->header_), this->ifs_.beg);
-            this->ifs_.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
-            return this->Mould_(this->rlecompressor_.Inflate(buffer));
+            if (this->loaded_)
+            {
+                /// Don't forget to start after the header of the PCX file
+                this->ifs_.seekg(sizeof(this->header_), this->ifs_.beg);
+                this->ifs_.read(reinterpret_cast<char *>(buffer.data()), buffer.size());
+                buffer = this->Mould_(this->rlecompressor_.Inflate(buffer));
+            }
+            return (buffer);
         }
     }
 }
