@@ -43,22 +43,17 @@ namespace HoMM3
         std::vector<byte>& Pcx::Mould_(std::vector<byte>& buffer)
         {
             /// Apply the margin bytes
-            byte lxpad[this->header_.xmargin];
-            byte rxpad[this->header_.flwidth - this->header_.xmargin - this->header_.fmwidth];
-            byte typad[this->header_.ymargin * this->header_.flwidth];
-            byte bypad[(this->header_.flheight - this->header_.ymargin - this->header_.fmheight) * this->header_.flwidth];
-            
-            std::fill_n(lxpad, sizeof(lxpad), 0);
-            std::fill_n(rxpad, sizeof(rxpad), 0);
-            std::fill_n(typad, sizeof(typad), 0);
-            std::fill_n(bypad, sizeof(bypad), 0);
+            std::vector<byte> lxpad(this->header_.xmargin, 0);
+            std::vector<byte> rxpad(this->header_.flwidth - this->header_.xmargin - this->header_.fmwidth, 0);
+            std::vector<byte> typad(this->header_.ymargin * this->header_.flwidth, 0);
+            std::vector<byte> bypad((this->header_.flheight - this->header_.ymargin - this->header_.fmheight) * this->header_.flwidth, 0);
 
             for (uint i = 0; i < this->header_.fmheight; ++i) {
-                buffer.insert(buffer.begin() + i * this->header_.flwidth, lxpad, lxpad + sizeof(lxpad));
-                buffer.insert(buffer.begin() + (i + 1) * this->header_.flwidth - sizeof(rxpad), rxpad, rxpad + sizeof(rxpad));
+                buffer.insert(buffer.begin() + i * this->header_.flwidth, lxpad.begin(), lxpad.end());
+                buffer.insert(buffer.begin() + (i + 1) * this->header_.flwidth - rxpad.size(), rxpad.begin(), rxpad.end());
             }
-            buffer.insert(buffer.begin(), typad, typad + sizeof(typad));
-            buffer.insert(buffer.end(), bypad, bypad + sizeof(bypad));
+            buffer.insert(buffer.begin(), typad.begin(), typad.end());
+            buffer.insert(buffer.end(), bypad.begin(), bypad.end());
             return buffer;
         }
         
