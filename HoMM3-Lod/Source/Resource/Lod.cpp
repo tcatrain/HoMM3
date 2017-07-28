@@ -53,18 +53,18 @@ namespace HoMM3
         /// <summary>Method used to read an entry into the LOD file</summary>
         /// <param name="eh">The entry header structure to read</param>
         /// <returns>The byte vector containing the entry</returns>
-        const std::vector<byte>& Lod::ReadEntry(const LodEntryHeader& eh)
+        const std::vector<byte> Lod::ReadEntry(const LodEntryHeader& eh)
         {
             bool is_compressed(eh.zsize != 0);
-            std::vector<byte> *buffer = new std::vector<byte>(is_compressed ? eh.zsize : eh.size), *entry;
+            std::vector<byte> buffer(is_compressed ? eh.zsize : eh.size), entry;
 
             if (this->loaded_)
             {
                 this->ifs_.seekg(eh.offset, this->ifs_.beg);
-                this->ifs_.read(reinterpret_cast<char *>(buffer->data()), buffer->size());
-                entry = &(is_compressed ? this->zcompressor_.Inflate(*buffer) : *buffer);
+                this->ifs_.read(reinterpret_cast<char *>(buffer.data()), buffer.size());
+                entry = is_compressed ? this->zcompressor_.Inflate(buffer) : buffer;
             }
-            return (*entry);
+            return (entry);
         }
     }
 }

@@ -38,10 +38,11 @@ namespace HoMM3
         /// <summary>Method used to mould the PCX entry file to full dimensions</summary>
         /// <param name="buffer">The buffer to work on containing the extracted PCX entry file</param>
         /// <returns>The provided vector updated</returns>
-        std::vector<byte>& Pcx::Mould_(std::vector<byte>& buffer)
+        std::vector<byte> Pcx::Mould_(std::vector<byte>& buffer)
         {
             /// Apply the margin bytes
             std::vector<byte> lxpad(this->header_.xmargin, 0);
+            lxpad.resiz
             std::vector<byte> rxpad(this->header_.flwidth - this->header_.xmargin - this->header_.fmwidth, 0);
             std::vector<byte> typad(this->header_.ymargin * this->header_.flwidth, 0);
             std::vector<byte> bypad((this->header_.flheight - this->header_.ymargin - this->header_.fmheight) * this->header_.flwidth, 0);
@@ -70,7 +71,7 @@ namespace HoMM3
         
         /// <summary>Method used to read an entry from the PCX file</summary>
         /// <returns>The byte vector containing the bitmap frame</returns>
-        std::vector<byte>& Pcx::ReadFrame()
+        std::vector<byte> Pcx::ReadFrame()
         {
             std::vector<byte> buffer(this->header_.size);
 
@@ -79,7 +80,8 @@ namespace HoMM3
                 /// Don't forget to start after the header of the PCX file
                 this->ifs_.seekg(sizeof(this->header_), this->ifs_.beg);
                 this->ifs_.read(reinterpret_cast<char *>(buffer.data()), buffer.size());
-                buffer = this->Mould_(this->rlecompressor_.Inflate(buffer));
+                buffer = this->rlecompressor_.Inflate(buffer);
+                buffer = this->Mould_(buffer);
             }
             return (buffer);
         }

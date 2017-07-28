@@ -45,7 +45,7 @@ namespace HoMM3
 
         /// <summary>Method used to generate the actual bitmap byte vector</summary>
         /// <returns>The bitmap byte vector</returns>
-        const std::vector<byte>& Bitmap::Create()
+        const std::vector<byte> Bitmap::Create()
         {
             /// First of all prepare the bitmap header
             this->PrepareHeader_();
@@ -53,18 +53,18 @@ namespace HoMM3
             byte *header_bytes = reinterpret_cast<byte *>(&this->header_);
             byte *infos_bytes = reinterpret_cast<byte *>(&this->infos_);
             
-            std::vector<byte> *bitmap_content = new std::vector<byte>();
+            std::vector<byte> bitmap_content;
             /// Push the bitmap header first into the vector
-            bitmap_content->insert(bitmap_content->end(), header_bytes, header_bytes + sizeof(this->header_));
+            bitmap_content.insert(bitmap_content.end(), header_bytes, header_bytes + sizeof(this->header_));
             /// Push the bitmap infos first into the vector
-            bitmap_content->insert(bitmap_content->end(), infos_bytes, infos_bytes + sizeof(this->infos_));
+            bitmap_content.insert(bitmap_content.end(), infos_bytes, infos_bytes + sizeof(this->infos_));
             /// Push one by one each entry in the palette in reverse rgb
             for (uint i = 0; i < this->infos_.palettesize; ++i)
             {
-                bitmap_content->push_back(this->palette_[i].b);
-                bitmap_content->push_back(this->palette_[i].g);
-                bitmap_content->push_back(this->palette_[i].r);
-                bitmap_content->push_back(this->palette_[i].a);
+                bitmap_content.push_back(this->palette_[i].b);
+                bitmap_content.push_back(this->palette_[i].g);
+                bitmap_content.push_back(this->palette_[i].r);
+                bitmap_content.push_back(this->palette_[i].a);
             }
             /// Pixels are added from bottom line up to the first
             for (uint i = 1; i <= this->infos_.height; ++i)
@@ -72,10 +72,10 @@ namespace HoMM3
                 /// Pixels within a line are added from left to right
                 for (uint j = 0; j < this->infos_.width; ++j)
                 {
-                    bitmap_content->push_back(this->pixels_[(this->infos_.height - i) * this->infos_.width + j]);
+                    bitmap_content.push_back(this->pixels_[(this->infos_.height - i) * this->infos_.width + j]);
                 }
             }
-            return (*bitmap_content);
+            return (bitmap_content);
         }
     }
 }

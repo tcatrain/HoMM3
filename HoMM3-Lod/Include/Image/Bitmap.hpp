@@ -132,7 +132,7 @@ namespace HoMM3
             
             /// <summary>Method used to generate the actual bitmap byte vector</summary>
             /// <returns>The bitmap byte vector</returns>
-            const std::vector<byte>& Create();
+            const std::vector<byte> Create();
         };
     }
 }

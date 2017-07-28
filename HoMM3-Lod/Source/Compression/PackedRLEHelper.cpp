@@ -181,7 +181,7 @@ namespace HoMM3
         /// <summary>Method used to deflate an inflated byte vector</summary>
         /// <param name="in_bytes">The input inflated byte vector</param>
         /// <returns>The output deflated byte vector</returns>
-        std::vector<byte>& PackedRLEHelper::Deflate(const std::vector<byte> &in_bytes)
+        std::vector<byte> PackedRLEHelper::Deflate(const std::vector<byte> &in_bytes)
         {
             this->unpked_size_ = (uint) in_bytes.size();
             uint chunk_nb = this->unpked_size_ / this->chunk_size_;
@@ -203,9 +203,9 @@ namespace HoMM3
         /// <summary>Method used to inflate a deflated byte vector</summary>
         /// <param name="in_bytes">The input deflated byte vector</param>
         /// <returns>The output inflated byte vector</returns>
-        std::vector<byte>& PackedRLEHelper::Inflate(const std::vector<byte>& in_bytes)
+        std::vector<byte> PackedRLEHelper::Inflate(const std::vector<byte>& in_bytes)
         {
-            std::vector<byte> *out_bytes = new std::vector<byte>();
+            std::vector<byte> out_bytes;
             uint chunk_nb = this->unpked_size_ / this->chunk_size_;
             usint chunk_offset;
 
@@ -214,9 +214,9 @@ namespace HoMM3
                 /// Reads the next 2 bytes to get the offset of the next chunk within the sequence
                 chunk_offset = *reinterpret_cast<const usint *>(&in_bytes[i * sizeof(usint)]);
                 /// Then position the cursor to the byte sequence starting at $offset
-                this->UnpackChunk_(in_bytes.data() + chunk_offset, *out_bytes);
+                this->UnpackChunk_(in_bytes.data() + chunk_offset, out_bytes);
             }
-            return (*out_bytes);
+            return (out_bytes);
         }
     }
 }

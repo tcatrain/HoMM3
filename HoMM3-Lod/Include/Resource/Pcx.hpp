@@ -61,7 +61,7 @@ namespace HoMM3
             
             /// <summary>Method used to mould the PCX entry file to full dimensions</summary>
             /// <param name="buffer">The buffer to work on containing the extracted PCX entry file</param>
-            std::vector<byte>& Mould_(std::vector<byte>&);
+            std::vector<byte> Mould_(std::vector<byte>&);
             
         public:
             /// <summary>
@@ -73,7 +73,7 @@ namespace HoMM3
             
             /// <summary>Method used to read an entry from the PCX file</summary>
             /// <returns>The byte vector containing the bitmap frame</returns>
-            std::vector<byte>& ReadFrame();
+            std::vector<byte> ReadFrame();
         };
         
     }
