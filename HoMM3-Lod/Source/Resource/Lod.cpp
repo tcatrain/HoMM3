@@ -31,25 +31,29 @@ namespace HoMM3
             for (int i = 0, n = this->header_.nb; i < n; ++i)
             {
                 std::unique_ptr<LodEntryHeader> up_eh(new LodEntryHeader());
-                
-                this->ifs_.read(reinterpret_cast<char *>(&*up_eh), sizeof(*up_eh));
+                this->reader_->Read(reinterpret_cast<char *>(&*up_eh), sizeof(*up_eh));
                 this->entries_headers_.push_back(std::move(up_eh));
             }
         }
         
     	/// <summary>
-        /// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream
-        /// and parses the file to locate content.
+        /// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream.
         /// </summary>
         /// <param name="path">Path of the LOD file to load</param>
         Lod::Lod(const std::string& path) : AResource(path)
         {
-            if (this->ifs_.is_open())
-            {
-                this->Load();
-            }
+            this->Load();
         }
 
+        /// <summary>
+        /// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream.
+        /// </summary>
+        /// <param name="bytes">Content of the LOD file to load</param>
+        Lod::Lod(const std::vector<byte>& bytes) : AResource(bytes)
+        {
+            this->Load();
+        }
+        
         /// <summary>Method used to read an entry into the LOD file</summary>
         /// <param name="eh">The entry header structure to read</param>
         /// <returns>The byte vector containing the entry</returns>
@@ -60,8 +64,8 @@ namespace HoMM3
 
             if (this->loaded_)
             {
-                this->ifs_.seekg(eh.offset, this->ifs_.beg);
-                this->ifs_.read(reinterpret_cast<char *>(buffer.data()), buffer.size());
+                this->reader_->Seek(eh.offset, std::ios::beg);
+                this->reader_->Read(reinterpret_cast<char *>(entry.data()), entry.size());
                 entry = is_compressed ? this->zcompressor_.Inflate(buffer) : buffer;
             }
             return (entry);

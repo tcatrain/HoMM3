@@ -65,11 +65,16 @@ namespace HoMM3
             
         public:
             /// <summary>
-            /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream
-            /// and parses the file to locate content.
+            /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream.
             /// </summary>
             /// <param name="path">Path of the LOD file to load</param>
             Pcx(const std::string&);
+            
+            /// <summary>
+            /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream.
+            /// </summary>
+            /// <param name="bytes">Content of the PCX file to load</param>
+            Pcx(const std::vector<byte>&);
             
             /// <summary>Method used to read an entry from the PCX file</summary>
             /// <returns>The byte vector containing the bitmap frame</returns>

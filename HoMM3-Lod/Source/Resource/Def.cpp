@@ -40,7 +40,7 @@ namespace HoMM3
             {
                 std::unique_ptr<DefSequenceHeader> up_eh(new DefSequenceHeader());
                 /// Read only the known fixed size of the header
-                this->ifs_.read(reinterpret_cast<char*>(&*up_eh), DefSequenceHeader::DEF_SEQH_FIXED_SIZE);
+                this->reader_->Read(reinterpret_cast<char*>(&*up_eh), DefSequenceHeader::DEF_SEQH_FIXED_SIZE);
                 /// The header should contain the number of frame in the sequence
                 for (uint j = 0, nfrm = up_eh->nb; j < nfrm; ++j)
                 {
@@ -62,10 +62,10 @@ namespace HoMM3
             if (current != 0)
             {
                 /// If an offset was already read, the cursor must be repositionned to the next name to read
-                this->ifs_.seekg(-sizeof(sequence_entry_header.offset) * current + -sizeof(sequence_entry_header.name) * (outof - current), this->ifs_.cur);
+                this->reader_->Seek(-sizeof(sequence_entry_header.offset) * current + -sizeof(sequence_entry_header.name) * (outof - current), std::ios::cur);
             }
             /// Read the frame name
-            this->ifs_.read(reinterpret_cast<char *>(&sequence_entry_header.name), sizeof(sequence_entry_header.name));
+            this->reader_->Read(reinterpret_cast<char *>(&sequence_entry_header.name), sizeof(sequence_entry_header.name));
         }
         
         /// <summary>Reads the next frame offset for the sequence</summary>
@@ -74,28 +74,33 @@ namespace HoMM3
         /// <param name="outof">Total expected iteration count</param>
         void Def::ReadNextOffset_(DefSequenceFrame& sequence_entry_header, uint current, uint outof)
         {
-            this->ifs_.seekg(sizeof(sequence_entry_header.name) * (outof - current - 1) + sizeof(sequence_entry_header.offset) * current, this->ifs_.cur);
+            this->reader_->Seek(sizeof(sequence_entry_header.name) * (outof - current - 1) + sizeof(sequence_entry_header.offset) * current, std::ios::cur);
             /// Read the frame offset
-            this->ifs_.read(reinterpret_cast<char *>(&sequence_entry_header.offset), sizeof(sequence_entry_header.offset));
+            this->reader_->Read(reinterpret_cast<char *>(&sequence_entry_header.offset), sizeof(sequence_entry_header.offset));
         }
         
     	/// <summary>
-        /// Constructor of the class HoMM3::Resource::Def. Opens the input file stream
-        /// and parses the file to locate content.
+        /// Constructor of the class HoMM3::Resource::Def. Opens the input file stream.
         /// </summary>
         /// <param name="path">Path of the DEF file to load</param>
         Def::Def(const std::string& path) : AResource(path)
         {
-            if (this->ifs_.is_open())
-            {
-                this->Load();
-            }
+            this->Load();
         }
     	
+        /// <summary>
+        /// Constructor of the class HoMM3::Resource::Def. Uses the vector as input stream.
+        /// </summary>
+        /// <param name="bytes">Content of the DEF file to load</param>
+        Def::Def(const std::vector<byte>& bytes) : AResource(bytes)
+        {
+            this->Load();
+        }
+        
         /// <summary>Destructor if the class HoMM3::Resource::Def</summary>
         Def::~Def()
         {
-            for (uint i = 0, n = this->header_.nb; i < n; ++i)
+            for (uint i = 0, n = this->EntriesHeaders().size(); i < n; ++i)
             {
                 this->entries_headers_[i]->seq_frames.clear();
             }
@@ -113,14 +118,14 @@ namespace HoMM3
                 for (uint i = 0, n = seqh.nb, size; i < n; ++i)
                 {
                     /// Position the cursor to the offset from the frame header
-                    this->ifs_.seekg(seqh.seq_frames[i]->offset, this->ifs_.beg);
+                    this->reader_->Seek(seqh.seq_frames[i]->offset, std::ios::beg);
                     /// Read the first uint containing the size of the frame
-                    this->ifs_.read(reinterpret_cast<char *>(&size), sizeof(size));
+                    this->reader_->Read(reinterpret_cast<char *>(&size), sizeof(size));
                     /// Go back to the offset from the frame header
-                    this->ifs_.seekg(seqh.seq_frames[i]->offset, this->ifs_.beg);
+                    this->reader_->Seek(seqh.seq_frames[i]->offset, std::ios::beg);
                     /// The whole pcx contains the frame + the header
                     std::vector<byte> frame(size + sizeof(PcxHeader));
-                    this->ifs_.read(reinterpret_cast<char *>(frame.data()), frame.size());
+                    this->reader_->Read(reinterpret_cast<char *>(&frame[0]), frame.size());
                     frames.push_back(frame);
                 }
             }

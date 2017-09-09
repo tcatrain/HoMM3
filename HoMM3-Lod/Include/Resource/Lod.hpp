@@ -81,11 +81,16 @@ namespace HoMM3
             
         public:
             /// <summary>
-            /// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream
-            /// and parses the file to locate content.
+            /// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream.
             /// </summary>
             /// <param name="path">Path of the LOD file to load</param>
             Lod(const std::string&);
+            
+            /// <summary>
+            /// Constructor of the class HoMM3::Resource::Lod. Opens the input file stream.
+            /// </summary>
+            /// <param name="bytes">Content of the LOD file</param>
+            Lod(const std::vector<byte>&);
 
             /// <summary>Method used to read an entry from the LOD file</summary>
             /// <param name="eh">The entry header structure to read</param>

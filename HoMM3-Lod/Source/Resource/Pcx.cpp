@@ -42,14 +42,15 @@ namespace HoMM3
         {
             /// Apply the margin bytes
             std::vector<byte> lxpad(this->header_.xmargin, 0);
-            lxpad.resiz
             std::vector<byte> rxpad(this->header_.flwidth - this->header_.xmargin - this->header_.fmwidth, 0);
             std::vector<byte> typad(this->header_.ymargin * this->header_.flwidth, 0);
             std::vector<byte> bypad((this->header_.flheight - this->header_.ymargin - this->header_.fmheight) * this->header_.flwidth, 0);
 
-            for (uint i = 0; i < this->header_.fmheight; ++i) {
+            for (uint i = 0; i < this->header_.fmheight; ++i)
+            {
                 buffer.insert(buffer.begin() + i * this->header_.flwidth, lxpad.begin(), lxpad.end());
                 buffer.insert(buffer.begin() + (i + 1) * this->header_.flwidth - rxpad.size(), rxpad.begin(), rxpad.end());
+
             }
             buffer.insert(buffer.begin(), typad.begin(), typad.end());
             buffer.insert(buffer.end(), bypad.begin(), bypad.end());
@@ -57,16 +58,21 @@ namespace HoMM3
         }
         
         /// <summary>
-        /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream
-        /// and parses the file to locate content.
+        /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream.
         /// </summary>
         /// <param name="path">Path of the PCX file to load</param>
         Pcx::Pcx(const std::string& path) : AResource(path)
         {
-            if (this->ifs_.is_open())
-            {
-                this->Load();
-            }
+            this->Load();
+        }
+        
+        /// <summary>
+        /// Constructor of the class HoMM3::Resource::Pcx. Opens the input file stream.
+        /// </summary>
+        /// <param name="bytes">Content of the PCX file to load</param>
+        Pcx::Pcx(const std::vector<byte>& bytes) : AResource(bytes)
+        {
+            this->Load();
         }
         
         /// <summary>Method used to read an entry from the PCX file</summary>
@@ -74,12 +80,11 @@ namespace HoMM3
         std::vector<byte> Pcx::ReadFrame()
         {
             std::vector<byte> buffer(this->header_.size);
-
             if (this->loaded_)
             {
                 /// Don't forget to start after the header of the PCX file
-                this->ifs_.seekg(sizeof(this->header_), this->ifs_.beg);
-                this->ifs_.read(reinterpret_cast<char *>(buffer.data()), buffer.size());
+                this->reader_->Seek(sizeof(this->header_), std::ios::beg);
+                this->reader_->Read(reinterpret_cast<char *>(&buffer), sizeof(buffer));
                 buffer = this->rlecompressor_.Inflate(buffer);
                 buffer = this->Mould_(buffer);
             }

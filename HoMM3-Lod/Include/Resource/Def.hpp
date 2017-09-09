@@ -138,11 +138,16 @@ namespace HoMM3
             
         public:
             /// <summary>
-            /// Constructor of the class HoMM3::Resource::Def. Reads the byte vector
-            /// and parses bytes to locate the sequences .
+            /// Constructor of the class HoMM3::Resource::Def. Opens the input file stream.
+            /// </summary>
+            /// <param name="path">Path of the DEF file to load</param>
+            Def(const std::string&);
+            
+            /// <summary>
+            /// Constructor of the class HoMM3::Resource::Def. Uses the vector as input stream.
             /// </summary>
             /// <param name="bytes">Byte vector containing the DEF file to read</param>
-            Def(const std::string&);
+            Def(const std::vector<byte>&);
             
             /// <summary>Destructor if the class HoMM3::Resource::Def</summary>
             ~Def();
