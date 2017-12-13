@@ -54,6 +54,7 @@ Makefile
 ## --------------------------
 ## Dependencies files
 ## --------------------------
+*.dylib
 Dependencies/zlib-1.2.8/CTestTestfile.cmake
 Dependencies/zlib-1.2.8/zlib.pc
 Dependencies/zlib-1\.2\.8/zconf\.h
@@ -64,6 +65,10 @@ Dependencies/googletest/googlemock/gmock\.cbp
 Dependencies/googletest/CTestTestfile\.cmake
 Dependencies/googletest/googletest-distribution\.cbp
 Dependencies/sfml-2\.4\.2/SFML\.cbp
+Dependencies/sfml-2.4.2/tools/pkg-config/sfml-audio.pc
+Dependencies/sfml-2.4.2/tools/pkg-config/sfml-network.pc
+Dependencies/sfml-2.4.2/tools/pkg-config/sfml-system.pc
+Dependencies/sfml-2.4.2/tools/pkg-config/sfml-window.pc
 Dependencies/zlib-1\.2\.8/libzlib\.dll
 Dependencies/zlib-1\.2\.8/zlib\.cbp
 Dependencies/zlib-1\.2\.8/zlib1rc\.obj
