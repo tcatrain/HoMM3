@@ -171,8 +171,8 @@ endmacro()
 project( HoMM3 C CXX )
 homm3_setup()
 
-add_subdirectory( ${HOMM3_ROOT_DIR}/Dependencies/zlib-1.2.8 )
-set( ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/zlib-1.2.8 )
+add_subdirectory( ${HOMM3_ROOT_DIR}/Dependencies/zlib-1.2.11 )
+set( ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/zlib-1.2.11 )
 
 add_subdirectory( ${HOMM3_ROOT_DIR}/Dependencies/googletest )
 set( GOOGLETEST_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/googletest/include )

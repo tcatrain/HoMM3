@@ -17,6 +17,7 @@ HoMM3\.cbp
 ## --------------------------
 *.xcode*
 *.build*
+*.xctestrun
 
 ## --------------------------
 ## CLion project files
